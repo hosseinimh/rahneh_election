@@ -33,13 +33,33 @@ export class PageUtils extends BasePageUtils {
 
     onLoad() {
         super.onLoad();
-        this.dispatch(setPageIconAction("pe-7s-rocket"));
+        this.dispatch(setPageIconAction("pe-7s-user"));
         this.fillForm();
     }
 
-    editAction({ id }) {
+    onView(item) {
+        this.dispatch(
+            setPagePropsAction({
+                action: "VIEW",
+                item,
+            })
+        );
+    }
+
+    onAction(props) {
+        switch (props.action) {
+            case "VIEW":
+                this.viewAction(props.item);
+
+                break;
+        }
+
+        super.onAction(props);
+    }
+
+    viewAction({ id }) {
         if (utils.isId(id)) {
-            this.navigate(`${BASE_PATH}/voters/edit/${id}`);
+            this.navigate(`${BASE_PATH}/voters/vote/${id}`);
         }
     }
 

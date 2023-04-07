@@ -1,7 +1,7 @@
 import React from "react";
 import { useSelector } from "react-redux";
 
-const Span = ({ children, className = "" }) => {
+const Span = ({ children, className = "", spanStyle = {} }) => {
     const ls = useSelector((state) => state.layoutReducer);
 
     return (
@@ -12,6 +12,7 @@ const Span = ({ children, className = "" }) => {
                         ? `d-inline placeholder col-12 ${className}`
                         : `col-12 ${className}`
                 }
+                style={{ ...spanStyle }}
             >
                 {ls?.loading ? "" : [...children]}
             </span>

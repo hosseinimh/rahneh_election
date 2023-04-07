@@ -4,6 +4,7 @@ import addUserSchema from "./User/AddUserSchema";
 import editUserSchema from "./User/EditUserSchema";
 import changePasswordUserSchema from "./User/ChangePasswordUserSchema";
 import searchVoterSchema from "./Voter/SearchVoterSchema";
+import proxicalVoteVoterSchema from "./Voter/ProxicalVoteVoterSchema";
 
 export {
     loginUserSchema,
@@ -12,4 +13,5 @@ export {
     editUserSchema,
     changePasswordUserSchema,
     searchVoterSchema,
+    proxicalVoteVoterSchema,
 };

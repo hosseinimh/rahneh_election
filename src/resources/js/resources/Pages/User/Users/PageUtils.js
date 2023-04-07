@@ -18,7 +18,7 @@ export class PageUtils extends BasePageUtils {
         const form = useForm({
             resolver: yupResolver(schema),
         });
-        super("Users", strings, useForm);
+        super("Users", strings, form);
         this.entity = new Entity();
         this.initialPageProps = {
             pageNumber: 1,
@@ -31,7 +31,7 @@ export class PageUtils extends BasePageUtils {
 
     onLoad() {
         super.onLoad();
-        this.dispatch(setPageIconAction("pe-7s-rocket"));
+        this.dispatch(setPageIconAction("pe-7s-users"));
         this.fillForm();
     }
 

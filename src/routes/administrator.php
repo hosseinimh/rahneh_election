@@ -23,4 +23,8 @@ Route::middleware(['auth:sanctum', 'auth.administrator'])->group(function () {
     Route::post('users/change_password/{model}', [UserController::class, 'changePassword']);
 
     Route::post('voters', [VoterController::class, 'index']);
+    Route::post('voters/show/nc', [VoterController::class, 'showByNationalCode']);
+    Route::post('voters/show/{model}', [VoterController::class, 'show']);
+    Route::post('voters/vote/{model}', [VoterController::class, 'vote']);
+    Route::post('voters/proxical_vote/{model}/{voter}', [VoterController::class, 'proxicalVote']);
 });

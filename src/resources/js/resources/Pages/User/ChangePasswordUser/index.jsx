@@ -4,7 +4,7 @@ import { InputTextColumn, FormPage } from "../../../components";
 import { PageUtils } from "./PageUtils";
 
 const ChangePasswordUser = () => {
-    const pageUtils = new PageUtils(form);
+    const pageUtils = new PageUtils();
 
     return (
         <FormPage pageUtils={pageUtils}>

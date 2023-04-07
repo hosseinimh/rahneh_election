@@ -5,6 +5,7 @@ import AddUser from "./User/AddUser";
 import EditUser from "./User/EditUser";
 import ChangePasswordUser from "./User/ChangePasswordUser";
 import Voters from "./Voter/Voters";
+import Vote from "./Voter/Vote";
 
 export {
     Dashboard,
@@ -14,4 +15,5 @@ export {
     EditUser,
     ChangePasswordUser,
     Voters,
+    Vote,
 };

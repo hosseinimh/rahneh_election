@@ -36,7 +36,6 @@ const BasePageLayout = ({ pageUtils, children, authPage = true, modals }) => {
 
     useEffect(() => {
         if (userState?.error) {
-            console.log("userState");
             dispatch(setLoadingAction(false));
             dispatch(
                 setMessageAction(
@@ -56,7 +55,6 @@ const BasePageLayout = ({ pageUtils, children, authPage = true, modals }) => {
             const hasKeys = !!Object.keys(pageUtils?.useForm?.formState?.errors)
                 .length;
             if (hasKeys) {
-                console.log("pageUtils?.useForm?.formState?.errors");
                 dispatch(
                     setMessageAction(
                         pageUtils?.useForm?.formState?.errors[
@@ -82,14 +80,12 @@ const BasePageLayout = ({ pageUtils, children, authPage = true, modals }) => {
 
     useEffect(() => {
         if (pageLoaded) {
-            console.log("pageLoaded");
             pageUtils.onLoad(params);
         }
     }, [pageLoaded]);
 
     useEffect(() => {
         if (pageState?.props?.action) {
-            console.log("pageState?.props?.action");
             pageUtils.onAction(pageState?.props);
         }
     }, [pageState?.props?.action]);
@@ -120,7 +116,6 @@ const BasePageLayout = ({ pageUtils, children, authPage = true, modals }) => {
         dispatch(setDispatchAction(dispatch));
 
         loadModals();
-        console.log("[]");
     }, []);
 
     const loadModals = () => {

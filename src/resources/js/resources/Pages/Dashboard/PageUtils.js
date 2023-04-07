@@ -45,8 +45,4 @@ export class PageUtils extends BasePageUtils {
             usersCount: result?.usersCount ?? 0,
         };
     }
-
-    propsIfNull() {
-        return this.initialPageProps;
-    }
 }

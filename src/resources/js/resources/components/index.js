@@ -1,14 +1,15 @@
-//Layout
+// Layout
 import FormPageLayout from "./Layout/FormPageLayout";
 import LoginPageLayout from "./Layout/LoginPageLayout";
 import PageLayout from "./Layout/PageLayout";
 
-//Section
+// Section
 import Header from "./Section/Header";
 import Footer from "./Section/Footer";
 import Sidebar from "./Section/Sidebar";
 import SearchBox from "./Section/SearchBox";
 import Card from "./Section/Card";
+import FormCard from "./Section/FormCard";
 
 // Span
 import Span from "./Span/Span";
@@ -31,8 +32,9 @@ import FallbackError from "./Error/FallbackError";
 import Table from "./Table/Table";
 import TableItems from "./Table/TableItems";
 import TableFooter from "./Table/TableFooter";
+import TableCard from "./Table/TableCard";
 
-//Input
+// Input
 import InputTextColumn from "./Input/InputTextColumn";
 import InputTextAreaColumn from "./Input/InputTextAreaColumn";
 import InputFileColumn from "./Input/InputFileColumn";
@@ -41,6 +43,9 @@ import InputReactSelectColumn from "./Input/InputReactSelectColumn";
 import InputRadioColumn from "./Input/InputRadioColumn";
 import InputCheckboxColumn from "./Input/InputCheckboxColumn";
 import InputSwitchCheckboxColumn from "./Input/InputSwitchCheckboxColumn";
+
+// Label
+import LabelColumn from "./Label/LabelColumn";
 
 // Modal
 import Modal from "./Modal/Modal";
@@ -59,6 +64,7 @@ export {
     Sidebar,
     SearchBox,
     Card,
+    FormCard,
     Span,
     CustomLink,
     TopLoadingBar,
@@ -69,6 +75,7 @@ export {
     Table,
     TableItems,
     TableFooter,
+    TableCard,
     InputTextColumn,
     InputTextAreaColumn,
     InputFileColumn,
@@ -77,6 +84,7 @@ export {
     InputRadioColumn,
     InputSwitchCheckboxColumn,
     InputCheckboxColumn,
+    LabelColumn,
     Modal,
     BlankPage,
     ListPage,

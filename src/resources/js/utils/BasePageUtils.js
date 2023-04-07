@@ -84,12 +84,25 @@ export class BasePageUtils {
         return this.initialPageProps;
     }
 
+    handleModifyResult(result) {
+        this.dispatch(setLoadingAction(false));
+        if (result === null) {
+            this.handleModifyIfResultNull();
+            return false;
+        } else {
+            this.handleModifyIfResultOK();
+            return true;
+        }
+    }
+
     handleModifyAndNavigateResult(result) {
         this.dispatch(setLoadingAction(false));
         if (result === null) {
             this.handleModifyIfResultNull();
+            return false;
         } else {
             this.handleModifyAndNavigateIfResultOK();
+            return true;
         }
     }
 
@@ -103,6 +116,16 @@ export class BasePageUtils {
         );
 
         return;
+    }
+
+    handleModifyIfResultOK() {
+        this.dispatch(
+            setMessageAction(
+                this.strings.submitted,
+                MESSAGE_TYPES.SUCCESS,
+                MESSAGE_CODES.OK
+            )
+        );
     }
 
     handleModifyAndNavigateIfResultOK() {

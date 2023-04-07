@@ -51,7 +51,7 @@ export class PageUtils extends BasePageUtils {
             this.navigateIfNotValidId(data.userId);
             const result = await this.fetchItem(data.userId);
             this.navigateIfItemNotFound(result);
-            this.updateValues(result);
+            this.updateForm(result);
             this.handleFetchResult(result);
         } catch {
         } finally {
@@ -65,7 +65,7 @@ export class PageUtils extends BasePageUtils {
             : await this.entity.getFromUser();
     }
 
-    updateValues(result) {
+    updateForm(result) {
         this.useForm.setValue("name", result.item.name);
         this.useForm.setValue("isActive", result.item.isActive);
         this.useForm.setValue(

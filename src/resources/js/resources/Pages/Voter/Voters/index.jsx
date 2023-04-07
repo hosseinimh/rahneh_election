@@ -1,7 +1,11 @@
 import React from "react";
 import { useSelector } from "react-redux";
 
-import { votersPage as strings, general } from "../../../../constants/strings";
+import {
+    votersPage as strings,
+    voteTypes,
+    general,
+} from "../../../../constants/strings";
 import {
     InputTextColumn,
     ListPage,
@@ -20,7 +24,6 @@ const Voters = () => {
 
     const renderSearch = () => (
         <div className="row">
-            <InputTextColumn field="name" />
             <InputTextColumn
                 field="nationalCode"
                 inputStyle={{
@@ -28,6 +31,7 @@ const Voters = () => {
                     direction: "ltr",
                 }}
             />
+            <InputTextColumn field="name" />
         </div>
     );
 
@@ -41,7 +45,7 @@ const Voters = () => {
             </th>
             <th scope="col">{strings.nameFamily}</th>
             <th scope="col" style={{ width: "150px" }}>
-                {strings.hasVoted}
+                {strings.voteStatus}
             </th>
             <th scope="col" style={{ width: "150px" }}>
                 {strings.nationalCode}
@@ -61,26 +65,27 @@ const Voters = () => {
                     <button
                         type="button"
                         className="btn btn-warning mb-2 px-4"
-                        onClick={() => pageUtils.onEdit(item)}
-                        title={general.edit}
+                        onClick={() => pageUtils.onView(item)}
+                        title={general.view}
                         disabled={layoutState?.loading}
                     >
-                        {general.edit}
+                        {general.view}
                     </button>
                 </td>
                 <td>{`${item.name} ${item.family}`}</td>
                 <td>
-                    <span style={{ color: "green" }}>
-                        {item.hasVoted && item.isNatural
-                            ? strings.naturalVoted
-                            : ""}
-                        {item.hasVoted && !item.isNatural
-                            ? strings.notNaturalVoted
-                            : ""}
-                    </span>
-                    <span style={{ color: "rgb(133 95 4)" }}>
-                        {!item.hasVoted ? strings.notVoted : ""}
-                    </span>
+                    {item.votedAt && (
+                        <span style={{ color: "green" }}>
+                            {item.isNatural
+                                ? voteTypes.naturalVoted
+                                : voteTypes.notNaturalVoted}
+                        </span>
+                    )}
+                    {!item.votedAt && (
+                        <span style={{ color: "rgb(133 95 4)" }}>
+                            {voteTypes.notVoted}
+                        </span>
+                    )}
                 </td>
                 <td>{item.nationalCode}</td>
             </tr>

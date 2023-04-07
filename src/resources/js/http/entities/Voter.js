@@ -19,11 +19,19 @@ export class Voter extends Entity {
         return await this.handlePost(`${BASE_URL}/a/voters/show/${id}`);
     }
 
-    async update(id, name, role, isActive) {
-        return await this.handlePost(`${BASE_URL}/a/voters/update/${id}`, {
-            name: name,
-            role: role,
-            is_active: isActive,
+    async getByNationalCode(nationalCode) {
+        return await this.handlePost(`${BASE_URL}/a/voters/show/nc`, {
+            national_code: nationalCode,
         });
+    }
+
+    async vote(id) {
+        return await this.handlePost(`${BASE_URL}/a/voters/vote/${id}`);
+    }
+
+    async proxicalVote(id, voter) {
+        return await this.handlePost(
+            `${BASE_URL}/a/voters/proxical_vote/${id}/${voter}`
+        );
     }
 }

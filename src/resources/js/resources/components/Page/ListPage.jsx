@@ -3,8 +3,7 @@ import { useSelector } from "react-redux";
 import { useNavigate } from "react-router";
 
 import { general } from "../../../constants/strings";
-import { PageLayout } from "../";
-import Table from "../Table/Table";
+import { PageLayout, TableCard } from "../";
 
 const ListPage = ({
     pageUtils,
@@ -48,21 +47,7 @@ const ListPage = ({
                 </div>
             )}
 
-            <div className="row mb-4">
-                <div className="col col-12">
-                    <div className="card">
-                        <div className="card-body">
-                            <div className="table-responsive">
-                                <Table
-                                    renderHeader={table.renderHeader}
-                                    renderItems={table.renderItems}
-                                    renderFooter={table?.renderFooter}
-                                />
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <TableCard table={table} />
         </PageLayout>
     );
 };

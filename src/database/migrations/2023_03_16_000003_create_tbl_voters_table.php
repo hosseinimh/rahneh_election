@@ -23,7 +23,7 @@ return new class extends Migration
             $table->unsignedBigInteger('voter_id_2')->default(0);
             $table->unsignedBigInteger('voter_id_3')->default(0);
             $table->unsignedBigInteger('user_id')->nullable();
-            $table->timestamp('voted_at')->nullable();
+            $table->dateTime('voted_at')->nullable();
             $table->timestamps();
             $table->softDeletes();
 

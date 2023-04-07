@@ -169,7 +169,7 @@ function Sidebar() {
                         {renderMenuItem(
                             `${BASE_PATH}/voters`,
                             strings.voters,
-                            "pe-7s-pen",
+                            "pe-7s-user",
                             "Voters"
                         )}
                         <li

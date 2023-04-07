@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Administrator;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Voter\IndexVotersRequest;
+use App\Http\Requests\Voter\SearchVoterByNationalCodeRequest;
 use App\Http\Requests\Voter\UpdateVoterRequest;
 use App\Http\Resources\Voter\VoterResource;
 use App\Models\Voter as Model;
@@ -35,8 +36,18 @@ class VoterController extends Controller
         return $this->onItem($this->service->get($model->id));
     }
 
-    public function update(Model $model, UpdateVoterRequest $request): HttpJsonResponse
+    public function showByNationalCode(SearchVoterByNationalCodeRequest $request): HttpJsonResponse
     {
-        return $this->onUpdate($this->service->update($model, $request->name, $request->role, $request->is_active));
+        return $this->onItem($this->service->getByNationalCode($request->national_code));
+    }
+
+    public function vote(Model $model): HttpJsonResponse
+    {
+        return $this->onUpdate($this->service->vote($model, auth()->user()->id));
+    }
+
+    public function proxicalVote(Model $model, Model $voter): HttpJsonResponse
+    {
+        return $this->onUpdate($this->service->proxicalVote($model, $voter, auth()->user()->id));
     }
 }

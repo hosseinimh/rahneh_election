@@ -8,7 +8,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Response;
 use Illuminate\Validation\ValidationException;
 
-class UpdateVoterRequest extends FormRequest
+class SearchVoterByNationalCodeRequest extends FormRequest
 {
     protected function failedValidation(Validator $validator)
     {

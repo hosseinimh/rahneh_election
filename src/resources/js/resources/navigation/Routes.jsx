@@ -18,6 +18,10 @@ function AuthRoute() {
                     {lsUser?.role === USER_ROLES.ADMINISTRATOR && (
                         <>
                             <Route
+                                path={`${BASE_PATH}/voters/vote/:voterId`}
+                                element={<Pages.Vote />}
+                            />
+                            <Route
                                 path={`${BASE_PATH}/voters`}
                                 element={<Pages.Voters />}
                             />

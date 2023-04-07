@@ -157,6 +157,12 @@ export const changePasswordUserPage = {
     submitted: "تغییر کلمه عبور با موفقیت انجام گردید.",
 };
 
+export const voteTypes = {
+    naturalVoted: "رای داده / اصالتی",
+    notNaturalVoted: "رای داده / وکالتی",
+    notVoted: "رای نداده",
+};
+
 export const votersPage = {
     _title: "واجدین شرایط",
     _subTitle: "فهرست واجدین شرایط رای در انتخابات شرکت",
@@ -166,11 +172,26 @@ export const votersPage = {
     nationalCodePlaceholder: "شماره ملی",
     actions: "عملیات",
     nameFamily: "نام و نام خانوادگی",
-    hasVoted: "رای‌دهی",
-    naturalVoted: "رای داده / اصالتی",
-    notNaturalVoted: "رای داده / وکالتی",
-    notVoted: "رای نداده",
+    voteStatus: "وضعیت رای‌دهی",
     votedCount: "تعداد آرای ثبت‌شده",
     vote: "رای",
     searchSubmit: "جستجو",
+};
+
+export const votePage = {
+    _title: "ثبت رای",
+    _subTitle: "ثبت رای سهام‌دار",
+    name: "نام",
+    family: "نام خانوادگی",
+    nationalCode: "شماره ملی",
+    nationalCodePlaceholder: "شماره ملی",
+    voteProxical: "ثبت رای وکالتی",
+    voted: "آراء وکالتی",
+    voter: "رای‌دهنده",
+    actions: "عملیات",
+    nameFamily: "نام و نام خانوادگی",
+    voteStatus: "وضعیت رای‌دهی",
+    cancel: "بازگشت",
+    submit: "ثبت رای",
+    submitted: "ثبت رای سهام‌دار با موفقیت انجام گردید.",
 };
