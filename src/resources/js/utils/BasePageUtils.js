@@ -1,6 +1,6 @@
 import { useSelector } from "react-redux";
 
-import { BASE_PATH, MESSAGE_CODES, MESSAGE_TYPES } from "../constants";
+import { MESSAGE_CODES, MESSAGE_TYPES } from "../constants";
 import { general } from "../constants/strings";
 import { setLoadingAction } from "../state/layout/layoutActions";
 import {
@@ -17,6 +17,7 @@ export class BasePageUtils {
         this.useForm = useForm;
         this.initialPageProps = {};
         this.callbackUrl = "";
+        this.messageField = null;
         this.pageState = useSelector((state) => state.pageReducer);
         this.userState = useSelector((state) => state.userReducer);
         this.dispatch = this.pageState.dispatch;
@@ -31,9 +32,8 @@ export class BasePageUtils {
         this.dispatch(setPagePropsAction(this.initialPageProps));
     }
 
-    onAction(props) {}
-
     onSendRequest() {
+        this.messageField = null;
         this.dispatch(setLoadingAction(true));
         this.dispatch(clearMessageAction());
     }
@@ -41,26 +41,13 @@ export class BasePageUtils {
     handleFetchResult(result, propsIfOK, propsIfNull) {
         this.dispatch(setLoadingAction(false));
         if (result === null) {
-            this.handleFetchIfResultNull(propsIfNull);
+            this.handleFetchResultIfNull(propsIfNull);
         } else {
-            this.handleFetchIfResultOK(propsIfOK);
+            this.handleFetchResultIfOK(propsIfOK);
         }
     }
 
-    handleFetchResultCallback(result, ok, propsIfNull) {
-        this.dispatch(setLoadingAction(false));
-        if (result === null) {
-            this.handleFetchIfResultNull(propsIfNull);
-        } else {
-            ok();
-        }
-    }
-
-    handleFetchIfResultOK(props) {
-        this.dispatch(setPagePropsAction(props));
-    }
-
-    handleFetchIfResultNull(props) {
+    handleFetchResultIfNull(props) {
         this.dispatch(setPagePropsAction(props));
         this.dispatch(
             setMessageAction(
@@ -69,6 +56,19 @@ export class BasePageUtils {
                 this.entity.errorCode
             )
         );
+    }
+
+    handleFetchResultIfOK(props) {
+        this.dispatch(setPagePropsAction(props));
+    }
+
+    handleFetchResultWithCallback(result, ok, propsIfNull) {
+        this.dispatch(setLoadingAction(false));
+        if (result === null) {
+            this.handleFetchResultIfNull(propsIfNull);
+        } else {
+            ok();
+        }
     }
 
     propsIfOK(result) {
@@ -87,38 +87,29 @@ export class BasePageUtils {
     handleModifyResult(result) {
         this.dispatch(setLoadingAction(false));
         if (result === null) {
-            this.handleModifyIfResultNull();
+            this.handleModifyResultIfNull();
             return false;
         } else {
-            this.handleModifyIfResultOK();
+            this.handleModifyResultIfOK();
             return true;
         }
     }
 
-    handleModifyAndNavigateResult(result) {
-        this.dispatch(setLoadingAction(false));
-        if (result === null) {
-            this.handleModifyIfResultNull();
-            return false;
-        } else {
-            this.handleModifyAndNavigateIfResultOK();
-            return true;
-        }
-    }
-
-    handleModifyIfResultNull() {
+    handleModifyResultIfNull() {
         this.dispatch(
             setMessageAction(
                 this.entity.errorMessage,
                 MESSAGE_TYPES.ERROR,
-                this.entity.errorCode
+                this.entity.errorCode,
+                true,
+                this.messageField
             )
         );
 
         return;
     }
 
-    handleModifyIfResultOK() {
+    handleModifyResultIfOK() {
         this.dispatch(
             setMessageAction(
                 this.strings.submitted,
@@ -128,7 +119,18 @@ export class BasePageUtils {
         );
     }
 
-    handleModifyAndNavigateIfResultOK() {
+    handleModifyResultAndNavigate(result) {
+        this.dispatch(setLoadingAction(false));
+        if (result === null) {
+            this.handleModifyResultIfNull();
+            return false;
+        } else {
+            this.handleModifyResultAndNavigateIfOK();
+            return true;
+        }
+    }
+
+    handleModifyResultAndNavigateIfOK() {
         this.dispatch(
             setMessageAction(
                 this.strings.submitted,
@@ -186,9 +188,19 @@ export class BasePageUtils {
                 this.editAction(props.item);
 
                 break;
+            case "VIEW":
+                this.viewAction(props.item);
+
+                break;
         }
 
         this.dispatch(setPagePropsAction({ action: null }));
+    }
+
+    setPage(page) {
+        this.dispatch(
+            setPagePropsAction({ action: "SET_PAGE", pageNumber: page })
+        );
     }
 
     onAdd() {
@@ -201,12 +213,6 @@ export class BasePageUtils {
                 action: "EDIT",
                 item,
             })
-        );
-    }
-
-    setPage(page) {
-        this.dispatch(
-            setPagePropsAction({ action: "SET_PAGE", pageNumber: page })
         );
     }
 

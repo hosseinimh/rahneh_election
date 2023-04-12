@@ -3,6 +3,7 @@ import { MESSAGE_TYPES } from "./messageTypes";
 import { MESSAGE_CODES } from "./messageCodes";
 import { UPLOADED_FILE } from "./UploadedFile";
 import { USER_ROLES } from "./userRoles";
+import { VOTED_TYPES } from "./votedTypes";
 import { BASE_PATH, ASSETS_PATH, IMAGES_PATH, PAGE_ITEMS } from "./theme";
 
 const BASE_URL = serverConfig.baseUrl;
@@ -17,4 +18,5 @@ export {
     MESSAGE_CODES,
     UPLOADED_FILE,
     USER_ROLES,
+    VOTED_TYPES,
 };

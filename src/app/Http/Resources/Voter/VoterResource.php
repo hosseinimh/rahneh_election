@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\Voter;
 
+use App\Constants\VotedType;
 use App\Facades\Helper;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -11,10 +12,9 @@ class VoterResource extends JsonResource
     {
         return [
             'id' => intval($this->id),
+            'nationalCode' => Helper::localeNumbers($this->national_code),
             'name' => Helper::localeNumbers($this->name) ?? '',
             'family' => Helper::localeNumbers($this->family) ?? '',
-            'nationalCode' => Helper::localeNumbers($this->national_code),
-            'isNatural' => intval($this->is_natural),
             'voterId1' => intval($this->voter_id_1),
             'voter1Name' => Helper::localeNumbers($this->voter_1_name) ?? '',
             'voter1Family' => Helper::localeNumbers($this->voter_1_family) ?? '',
@@ -29,11 +29,25 @@ class VoterResource extends JsonResource
             'voter3NationalCode' => Helper::localeNumbers($this->voter_3_national_code),
             'userId' => intval($this->user_id),
             'username' => $this->username,
+            'votedType' => intval($this->voted_type),
+            'votedTypeText' => $this->getVotedType(intval($this->voted_type)),
             'votedAt' => $this->voted_at,
             'votedAtFa' => $this->voted_at ? Helper::localeNumbers(Helper::faDate2($this->voted_at)) : '',
             'proxicalCount' => $this->proxicalCount(),
-            'voter' => $this->is_natural === 0 ? new VoterResource($this->voter) : null
+            'voter' => $this->voted_type === VotedType::PROXICAL ? new VoterResource($this->voter) : null,
+            'notShareholderNationalCode' => Helper::localeNumbers($this->not_shareholder_national_code),
+            'notShareholderName' => Helper::localeNumbers($this->not_shareholder_name) ?? '',
+            'notShareholderFamily' => Helper::localeNumbers($this->not_shareholder_family) ?? '',
         ];
+    }
+
+    private function getVotedType(int $votedType)
+    {
+        if (in_array($votedType, [0, 1, 2, 3])) {
+            return __('voter.voted_type_' . $votedType);
+        }
+
+        return __('voter.voted_type__undefined');
     }
 
     private function proxicalCount()

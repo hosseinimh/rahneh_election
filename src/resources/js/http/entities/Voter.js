@@ -15,6 +15,15 @@ export class Voter extends Entity {
         });
     }
 
+    async getVotedPaginate(name, nationalCode, _pn = 1, _pi = PAGE_ITEMS) {
+        return await this.handlePost(`${BASE_URL}/a/voters/voted`, {
+            name: name ?? "",
+            national_code: nationalCode ?? "",
+            _pn,
+            _pi,
+        });
+    }
+
     async get(id) {
         return await this.handlePost(`${BASE_URL}/a/voters/show/${id}`);
     }
@@ -25,13 +34,29 @@ export class Voter extends Entity {
         });
     }
 
-    async vote(id) {
-        return await this.handlePost(`${BASE_URL}/a/voters/vote/${id}`);
+    async personalVote(id) {
+        return await this.handlePost(
+            `${BASE_URL}/a/voters/personal_vote/${id}`
+        );
     }
 
-    async proxicalVote(id, voter) {
+    async proxicalVote(id, nationalCode) {
         return await this.handlePost(
-            `${BASE_URL}/a/voters/proxical_vote/${id}/${voter}`
+            `${BASE_URL}/a/voters/proxical_vote/${id}`,
+            {
+                national_code: nationalCode,
+            }
+        );
+    }
+
+    async notShareholderVote(id, nationalCode, name, family) {
+        return await this.handlePost(
+            `${BASE_URL}/a/voters/not_shareholder_vote/${id}`,
+            {
+                national_code: nationalCode,
+                name: name,
+                family: family,
+            }
         );
     }
 }

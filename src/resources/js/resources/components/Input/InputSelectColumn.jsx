@@ -17,8 +17,9 @@ const InputSelectColumn = ({
     multiple = false,
     selectedValues = undefined,
 }) => {
-    const ls = useSelector((state) => state.layoutReducer);
-    const ms = useSelector((state) => state.messageReducer);
+    const layoutState = useSelector((state) => state.layoutReducer);
+    const pageState = useSelector((state) => state.pageReducer);
+    const messageState = useSelector((state) => state.messageReducer);
     const [label, setLabel] = useState(
         strings && field in strings ? strings[field] : ""
     );
@@ -27,16 +28,17 @@ const InputSelectColumn = ({
     useEffect(() => {
         if (!strings) {
             setLabel(
-                ls?.pageProps?.strings && field in ls.pageProps.strings
-                    ? ls?.pageProps?.strings[field]
+                pageState?.pageUtils?.strings &&
+                    field in pageState.pageUtils.strings
+                    ? pageState?.pageUtils?.strings[field]
                     : ""
             );
         }
 
         if (!useForm) {
-            setForm(ls?.pageProps?.useForm);
+            setForm(pageState?.pageUtils?.useForm);
         }
-    }, [ls]);
+    }, [pageState]);
 
     useEffect(() => {
         form?.setValue(field, form?.getValues(field));
@@ -59,12 +61,12 @@ const InputSelectColumn = ({
                 size={size}
                 {...field}
                 className={
-                    ms?.messageField === field.name
-                        ? "form-select is-invalid"
-                        : "form-select"
+                    messageState?.messageField === field.name
+                        ? "form-control is-invalid"
+                        : "form-control"
                 }
                 aria-label={`select ${field.name}`}
-                disabled={ls?.loading}
+                disabled={layoutState?.loading}
                 onChange={(e) => {
                     form.setValue(field.name, e.target.value);
 
@@ -81,8 +83,8 @@ const InputSelectColumn = ({
                     </option>
                 ))}
             </select>
-            {ms?.messageField === field.name && (
-                <div className="invalid-feedback">{ms?.message}</div>
+            {messageState?.messageField === field.name && (
+                <div className="invalid-feedback">{messageState?.message}</div>
             )}
         </>
     );

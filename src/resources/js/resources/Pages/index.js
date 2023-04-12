@@ -5,6 +5,7 @@ import AddUser from "./User/AddUser";
 import EditUser from "./User/EditUser";
 import ChangePasswordUser from "./User/ChangePasswordUser";
 import Voters from "./Voter/Voters";
+import Voted from "./Voter/Voted";
 import Vote from "./Voter/Vote";
 
 export {
@@ -15,5 +16,6 @@ export {
     EditUser,
     ChangePasswordUser,
     Voters,
+    Voted,
     Vote,
 };

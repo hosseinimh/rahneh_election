@@ -97,6 +97,6 @@ export class PageUtils extends BasePageUtils {
             role,
             data.isActive ? 1 : 0
         );
-        this.handleModifyAndNavigateResult(result);
+        this.handleModifyResultAndNavigate(result);
     }
 }

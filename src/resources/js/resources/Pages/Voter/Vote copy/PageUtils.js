@@ -13,7 +13,6 @@ import { BASE_PATH, VOTED_TYPES } from "../../../../constants";
 import { setLoadingAction } from "../../../../state/layout/layoutActions";
 import utils from "../../../../utils/Utils";
 import { voteVoterSchema as schema } from "../../../validations";
-import { clearMessageAction } from "../../../../state/message/messageActions";
 
 export class PageUtils extends BasePageUtils {
     constructor() {
@@ -41,8 +40,8 @@ export class PageUtils extends BasePageUtils {
 
     onAction(props) {
         switch (props.action) {
-            case "REFRESH":
-                this.refreshAction(props.item);
+            case "VOTE_TYPE":
+                this.viewAction(props.item);
 
                 break;
         }
@@ -59,7 +58,6 @@ export class PageUtils extends BasePageUtils {
                 VOTED_TYPES.NOT_SHAREHOLDER,
             ].includes(voteType)
         ) {
-            this.dispatch(clearMessageAction());
             this.dispatch(
                 setPagePropsAction({
                     voteType,
@@ -68,18 +66,8 @@ export class PageUtils extends BasePageUtils {
         }
     }
 
-    onView(id) {
-        this.dispatch(
-            setPagePropsAction({
-                action: "VIEW",
-                item: { id },
-            })
-        );
-    }
-
     viewAction({ id }) {
         if (utils.isId(id)) {
-            console.log(id);
             window.history.replaceState(
                 null,
                 "",
@@ -125,34 +113,13 @@ export class PageUtils extends BasePageUtils {
     }
 
     async onSubmit(data) {
+        console.log(data);
+        return;
         this.onSendRequest();
-        const result = await this.vote(this.pageState?.props?.voteType, data);
+        const result = await this.entity.personalVote(
+            this.pageState?.props?.voterId
+        );
         this.handleModifyResult(result);
         this.dispatch(setPagePropsAction({ action: "REFRESH" }));
-    }
-
-    async vote(voteType, data) {
-        switch (voteType) {
-            case VOTED_TYPES.PERSONAL:
-                return await this.entity.personalVote(
-                    this.pageState?.props?.voterId
-                );
-            case VOTED_TYPES.PROXICAL:
-                this.messageField = "proxicalVoterNationalCode";
-                return await this.entity.proxicalVote(
-                    this.pageState?.props?.voterId,
-                    data.proxicalVoterNationalCode
-                );
-            case VOTED_TYPES.NOT_SHAREHOLDER:
-                this.messageField = "notShareholderVoterNationalCode";
-                return await this.entity.notShareholderVote(
-                    this.pageState?.props?.voterId,
-                    data.notShareholderVoterNationalCode,
-                    data.notShareholderVoterName,
-                    data.notShareholderVoterFamily
-                );
-            default:
-                return null;
-        }
     }
 }

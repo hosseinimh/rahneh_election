@@ -2,19 +2,20 @@ import React from "react";
 import { useSelector } from "react-redux";
 
 const Span = ({ children, className = "", spanStyle = {} }) => {
-    const ls = useSelector((state) => state.layoutReducer);
+    const layoutState = useSelector((state) => state.layoutReducer);
 
     return (
-        <p className="placeholder-glow d-inline">
+        <p className="placeholder-glow d-inline mx-2">
             <span
                 className={
-                    ls?.loading
-                        ? `d-inline placeholder col-12 ${className}`
-                        : `col-12 ${className}`
+                    layoutState?.loading
+                        ? `d-inline placeholder ${className}`
+                        : `${className}`
                 }
                 style={{ ...spanStyle }}
             >
-                {ls?.loading ? "" : [...children]}
+                {layoutState?.loading && <></>}
+                {!layoutState?.loading && <>{children}</>}
             </span>
         </p>
     );

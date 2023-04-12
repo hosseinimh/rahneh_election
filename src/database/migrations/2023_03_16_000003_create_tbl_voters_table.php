@@ -18,12 +18,15 @@ return new class extends Migration
             $table->string('national_code')->unique();
             $table->string('name');
             $table->string('family');
-            $table->unsignedTinyInteger('is_natural')->default(1);
             $table->unsignedBigInteger('voter_id_1')->default(0);
             $table->unsignedBigInteger('voter_id_2')->default(0);
             $table->unsignedBigInteger('voter_id_3')->default(0);
             $table->unsignedBigInteger('user_id')->nullable();
+            $table->unsignedTinyInteger('voted_type')->default(0);
             $table->dateTime('voted_at')->nullable();
+            $table->string('not_shareholder_national_code')->nullable();
+            $table->string('not_shareholder_name')->nullable();
+            $table->string('not_shareholder_family')->nullable();
             $table->timestamps();
             $table->softDeletes();
 

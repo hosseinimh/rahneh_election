@@ -172,6 +172,12 @@ function Sidebar() {
                             "pe-7s-user",
                             "Voters"
                         )}
+                        {renderMenuItem(
+                            `${BASE_PATH}/voters/voted`,
+                            strings.voted,
+                            "pe-7s-pen",
+                            "Voted"
+                        )}
                         <li
                             className={`${
                                 ["Users"].includes(pageState?.page)

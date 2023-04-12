@@ -22,6 +22,10 @@ function AuthRoute() {
                                 element={<Pages.Vote />}
                             />
                             <Route
+                                path={`${BASE_PATH}/voters/voted`}
+                                element={<Pages.Voted />}
+                            />
+                            <Route
                                 path={`${BASE_PATH}/voters`}
                                 element={<Pages.Voters />}
                             />

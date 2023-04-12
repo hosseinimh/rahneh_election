@@ -38,6 +38,7 @@ import TableCard from "./Table/TableCard";
 import InputTextColumn from "./Input/InputTextColumn";
 import InputTextAreaColumn from "./Input/InputTextAreaColumn";
 import InputFileColumn from "./Input/InputFileColumn";
+import InputHiddenElement from "./Input/InputHiddenElement";
 import InputSelectColumn from "./Input/InputSelectColumn";
 import InputReactSelectColumn from "./Input/InputReactSelectColumn";
 import InputRadioColumn from "./Input/InputRadioColumn";
@@ -79,6 +80,7 @@ export {
     InputTextColumn,
     InputTextAreaColumn,
     InputFileColumn,
+    InputHiddenElement,
     InputSelectColumn,
     InputReactSelectColumn,
     InputRadioColumn,

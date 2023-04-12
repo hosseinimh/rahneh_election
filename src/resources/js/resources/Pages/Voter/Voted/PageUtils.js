@@ -8,10 +8,7 @@ import {
     setPagePropsAction,
     setPageTitleAction,
 } from "../../../../state/page/pageActions";
-import {
-    votersPage as strings,
-    voteTypes,
-} from "../../../../constants/strings";
+import { votedPage as strings, voteTypes } from "../../../../constants/strings";
 import { BasePageUtils } from "../../../../utils/BasePageUtils";
 import { BASE_PATH } from "../../../../constants";
 import utils from "../../../../utils/Utils";
@@ -22,7 +19,7 @@ export class PageUtils extends BasePageUtils {
         const form = useForm({
             resolver: yupResolver(schema),
         });
-        super("Voters", strings, form);
+        super("Voted", strings, form);
         this.entity = new Entity();
         this.initialPageProps = {
             pageNumber: 1,
@@ -35,7 +32,7 @@ export class PageUtils extends BasePageUtils {
 
     onLoad() {
         super.onLoad();
-        this.dispatch(setPageIconAction("pe-7s-user"));
+        this.dispatch(setPageIconAction("pe-7s-pen"));
         this.fillForm();
     }
 
@@ -67,7 +64,7 @@ export class PageUtils extends BasePageUtils {
 
     async fillForm(data = null) {
         this.dispatch(setLoadingAction(true));
-        const result = await this.entity.getPaginate(
+        const result = await this.entity.getVotedPaginate(
             data?.name ?? "",
             data?.nationalCode ?? "",
             this.pageState.props?.pageNumber ?? 1

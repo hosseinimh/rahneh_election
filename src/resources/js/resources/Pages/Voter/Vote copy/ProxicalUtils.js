@@ -3,9 +3,9 @@ import { yupResolver } from "@hookform/resolvers/yup";
 
 import { Voter as Entity } from "../../../../http/entities";
 import { setPagePropsAction } from "../../../../state/page/pageActions";
-import { votePage as strings } from "../../../../constants/strings";
+import { general, votePage as strings } from "../../../../constants/strings";
 import { BasePageUtils } from "../../../../utils/BasePageUtils";
-import { BASE_PATH, MESSAGE_TYPES } from "../../../../constants";
+import { BASE_PATH, MESSAGE_CODES, MESSAGE_TYPES } from "../../../../constants";
 import { setLoadingAction } from "../../../../state/layout/layoutActions";
 import { proxicalVoteVoterSchema as schema } from "../../../validations";
 import utils from "../../../../utils/Utils";
@@ -33,17 +33,6 @@ export class ProxicalUtils extends BasePageUtils {
         );
     }
 
-    onAction(props) {
-        switch (props.action) {
-            case "VIEW":
-                this.viewAction(props.item);
-
-                break;
-        }
-
-        super.onAction(props);
-    }
-
     viewAction({ id }) {
         if (utils.isId(id)) {
             window.location.href = `${BASE_PATH}/voters/vote/${id}`;
@@ -58,9 +47,9 @@ export class ProxicalUtils extends BasePageUtils {
             this.dispatch(setPagePropsAction(this.propsIfNull()));
             this.dispatch(
                 setMessageAction(
-                    this.entity.errorMessage,
+                    strings.nationalCodeNotFound,
                     MESSAGE_TYPES.ERROR,
-                    this.entity.errorCode,
+                    MESSAGE_CODES.FORM_INPUT_INVALID,
                     true,
                     "nationalCode"
                 )
@@ -72,6 +61,7 @@ export class ProxicalUtils extends BasePageUtils {
     }
 
     async fetchItem(nationalCode) {
+        nationalCode = utils.convertNumberToEnglish(nationalCode);
         return await this.entity.getByNationalCode(nationalCode);
     }
 

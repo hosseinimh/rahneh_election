@@ -86,6 +86,6 @@ export class PageUtils extends BasePageUtils {
                       data.newPassword,
                       data.confirmPassword
                   );
-        this.handleModifyAndNavigateResult(result);
+        this.handleModifyResultAndNavigate(result);
     }
 }

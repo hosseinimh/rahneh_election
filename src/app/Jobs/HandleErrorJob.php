@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\Models\Error;
+use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -50,7 +51,7 @@ $name: $value";
             }
 
             Error::create(['message' => $message]);
-        } catch (\Exception) {
+        } catch (Exception) {
         }
     }
 }

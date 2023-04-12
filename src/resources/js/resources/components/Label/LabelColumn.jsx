@@ -5,7 +5,7 @@ import Span from "../Span/Span";
 const LabelColumn = ({
     field,
     strings = null,
-    columnClassName = "col-md-3 col-12 pb-4",
+    columnClassName = "col-md-4 col-12 pb-4",
 }) => {
     const pageState = useSelector((state) => state.pageReducer);
     const [label, setLabel] = useState(

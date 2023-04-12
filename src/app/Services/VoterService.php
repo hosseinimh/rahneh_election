@@ -2,10 +2,12 @@
 
 namespace App\Services;
 
+use App\Constants\VotedType;
 use App\Http\Resources\Voter\VoterResource;
 use App\Models\Voter as Model;
-use Exception;
+use App\Models\Voter;
 use Illuminate\Support\Facades\DB;
+use Exception;
 use PDOException;
 
 class VoterService
@@ -25,15 +27,24 @@ class VoterService
 
     public function getByNationalCode(string $nationalCode): mixed
     {
-        $record = Model::leftJoin('tbl_users', 'user_id', '=', 'tbl_users.id')
+        return Model::leftJoin('tbl_users', 'user_id', '=', 'tbl_users.id')
             ->leftJoin('tbl_voters AS voters1', 'tbl_voters.voter_id_1', '=', 'voters1.id')
             ->leftJoin('tbl_voters AS voters2', 'tbl_voters.voter_id_2', '=', 'voters2.id')
             ->leftJoin('tbl_voters AS voters3', 'tbl_voters.voter_id_3', '=', 'voters3.id')
             ->where('tbl_voters.national_code', $nationalCode)
             ->select('tbl_voters.*', 'tbl_users.username', 'voters1.name AS voter_1_name', 'voters1.family AS voter_1_family', 'voters1.national_code AS voter_1_national_code', 'voters2.name AS voter_2_name', 'voters2.family AS voter_2_family', 'voters2.national_code AS voter_2_national_code', 'voters3.name AS voter_3_name', 'voters3.family AS voter_3_family', 'voters3.national_code AS voter_3_national_code')
             ->first();
-        $this->checkAndFillVoterIfProxical($record);
-        return $record;
+    }
+
+    public function getByNotShareholderNationalCode(string $nationalCode): mixed
+    {
+        return Model::leftJoin('tbl_users', 'user_id', '=', 'tbl_users.id')
+            ->leftJoin('tbl_voters AS voters1', 'tbl_voters.voter_id_1', '=', 'voters1.id')
+            ->leftJoin('tbl_voters AS voters2', 'tbl_voters.voter_id_2', '=', 'voters2.id')
+            ->leftJoin('tbl_voters AS voters3', 'tbl_voters.voter_id_3', '=', 'voters3.id')
+            ->where('tbl_voters.not_shareholder_national_code', $nationalCode)
+            ->select('tbl_voters.*', 'tbl_users.username', 'voters1.name AS voter_1_name', 'voters1.family AS voter_1_family', 'voters1.national_code AS voter_1_national_code', 'voters2.name AS voter_2_name', 'voters2.family AS voter_2_family', 'voters2.national_code AS voter_2_national_code', 'voters3.name AS voter_3_name', 'voters3.family AS voter_3_family', 'voters3.national_code AS voter_3_national_code')
+            ->first();
     }
 
     public function getPaginate(string $name, string $nationalCode, int $page, int $pageItems): mixed
@@ -51,29 +62,46 @@ class VoterService
             ->orderBy('tbl_voters.family', 'ASC')->orderBy('tbl_voters.name', 'ASC')->orderBy('tbl_voters.id', 'ASC')->skip(($page - 1) * $pageItems)->take($pageItems)->get();
     }
 
-    public function vote(Model $model, int $userId): bool
+    public function getVotedPaginate(string $name, string $nationalCode, int $page, int $pageItems): mixed
     {
-        try {
-            $this->checkVoteOnce($model);
-            $data = [
-                'user_id' => $userId,
-                'voted_at' => date('Y-m-d H:i:s'),
-            ];
-
-            return $model->update($data);
-        } catch (Exception) {
-            return false;
-        }
+        return Model::leftJoin('tbl_users', 'user_id', '=', 'tbl_users.id')
+            ->leftJoin('tbl_voters AS voters1', 'tbl_voters.voter_id_1', '=', 'voters1.id')
+            ->leftJoin('tbl_voters AS voters2', 'tbl_voters.voter_id_2', '=', 'voters2.id')
+            ->leftJoin('tbl_voters AS voters3', 'tbl_voters.voter_id_3', '=', 'voters3.id')
+            ->where(function ($query) use($name) {
+                $query->where('tbl_voters.name', 'LIKE', '%' . $name . '%')
+                ->orWhere('tbl_voters.family', 'LIKE', '%' . $name . '%');
+            })
+            ->where('tbl_voters.national_code', 'LIKE', '%'. $nationalCode . '%')
+            ->whereNotNull('tbl_voters.voted_at')
+            ->select('tbl_voters.*', 'tbl_users.username', 'voters1.name AS voter_1_name', 'voters1.family AS voter_1_family', 'voters1.national_code AS voter_1_national_code', 'voters2.name AS voter_2_name', 'voters2.family AS voter_2_family', 'voters2.national_code AS voter_2_national_code', 'voters3.name AS voter_3_name', 'voters3.family AS voter_3_family', 'voters3.national_code AS voter_3_national_code')
+            ->orderBy('tbl_voters.family', 'ASC')->orderBy('tbl_voters.name', 'ASC')->orderBy('tbl_voters.id', 'ASC')->skip(($page - 1) * $pageItems)->take($pageItems)->get();
     }
 
-    public function proxicalVote(Model $model, Model $voter, int $userId): bool
+    public function personalVote(Model $model, int $userId): bool
+    {
+        $this->checkVoteOnce($model);
+        $data = [
+            'voted_type' => VotedType::PERSONAL,
+            'user_id' => $userId,
+            'voted_at' => date('Y-m-d H:i:s'),
+        ];
+
+        return $model->update($data);
+    }
+
+    public function proxicalVote(Model $model, string $nationalCode, int $userId): bool
     {
         try {
-            DB::beginTransaction();
             $this->checkVoteOnce($model);
+            $voter = $this->getByNationalCode($nationalCode);
+            $this->checkVoterExists($voter);
+            $this->checkVotersNotSame($model, $voter);
+            $this->checkVoterVoted($voter);
             $index = $this->getProxyIndex($voter);
+            DB::beginTransaction();
             $data = [
-                'is_natural' => 0,
+                'voted_type' => VotedType::PROXICAL,
                 'user_id' => $userId,
                 'voted_at' => date('Y-m-d H:i:s'),
             ];
@@ -84,13 +112,29 @@ class VoterService
             $voter->update($data);
             DB::commit();
             return true;
-        } catch (PDOException $e) {
-            // Woopsy
+        } catch (PDOException) {
             DB::rollBack();
             return false;
-        } catch (Exception) {
-            return false;
         }
+    }
+
+    public function notShareholderVote(Model $model, string $nationalCode, string $name, string $family, int $userId): bool
+    {
+        $this->checkVoteOnce($model);
+        $voter = $this->getByNationalCode($nationalCode);
+        $this->checkVoterNotExists($voter);
+        $voter = $this->getByNotShareholderNationalCode($nationalCode);
+        $this->checkNotShareholderVoteOnce($voter);
+        $data = [
+            'voted_type' => VotedType::NOT_SHAREHOLDER,
+            'user_id' => $userId,
+            'voted_at' => date('Y-m-d H:i:s'),
+            'not_shareholder_national_code' => $nationalCode,
+            'not_shareholder_name' => $name,
+            'not_shareholder_family' => $family,
+        ];
+
+        return $model->update($data);
     }
 
     public function count(string $name, string $nationalCode): int
@@ -106,36 +150,90 @@ class VoterService
             ->where('tbl_voters.national_code', 'LIKE', '%'. $nationalCode . '%')
             ->count();
     }
-    public function countVoted(): int
+    public function countVoted(string $name = '', string $nationalCode = ''): int
     {
-        return Model::whereNotNull('voted_at')->count();
+        return Model::where(function ($query) use($name) {
+                $query->where('name', 'LIKE', '%' . $name . '%')
+                ->orWhere('family', 'LIKE', '%' . $name . '%');
+            })
+            ->where('national_code', 'LIKE', '%'. $nationalCode . '%')->whereNotNull('voted_at')->count();
+    }
+
+    public function countPersonalVoted(): int
+    {
+        return Model::where('voted_type', VotedType::PERSONAL)->whereNotNull('voted_at')->count();
+    }
+
+    public function countProxicalVoted(): int
+    {
+        return Model::where('voted_type', VotedType::PROXICAL)->whereNotNull('voted_at')->count();
+    }
+
+    public function countNotShareholderVoted(): int
+    {
+        return Model::where('voted_type', VotedType::NOT_SHAREHOLDER)->whereNotNull('voted_at')->count();
+    }
+
+    private function checkVoterExists(mixed $voter)
+    {
+        if (!$voter || !($voter instanceof Voter)) {
+            throw new Exception(__('voter.voter_not_found'), 5009);
+        }
+    }
+
+    private function checkVoterNotExists(mixed $voter)
+    {
+        if ($voter && $voter instanceof Voter) {
+            throw new Exception(__('voter.voter_found'), 5009);
+        }
+    }
+
+    private function checkVotersNotSame(Model $model, Model $voter)
+    {
+        if ($model->id === $voter->id) {
+            throw new Exception(__('voter.voters_same'), 5009);
+        }
     }
 
     private function checkVoteOnce(Model $model)
     {
-        if ($model->voted_at){
-            throw new Exception();
+        if ($model->voted_at) {
+            throw new Exception(__('voter.voter_voted'), 5009);
+        }
+    }
+
+    private function checkNotShareholderVoteOnce(Model $voter)
+    {
+        if ($voter && $voter instanceof Voter) {
+            throw new Exception(__('voter.not_shareholder_voter_voted'), 5009);
+        }
+    }
+
+    private function checkVoterVoted(Model $voter)
+    {
+        if (!$voter->voted_at) {
+            throw new Exception(__('voter.voter_should_vote_first'), 5009);
         }
     }
 
      private function getProxyIndex(Model $model): int
     {
-        if (!$model->voter_id_1){
+        if (!$model->voter_id_1) {
             return 1;
         }
-        if (!$model->voter_id_2){
+        if (!$model->voter_id_2) {
             return 2;
         }
-        if (!$model->voter_id_3){
+        if (!$model->voter_id_3) {
             return 3;
         }
 
-        throw new Exception();
+        throw new Exception(__('voter.voter_voted_proxical'), 5009);
     }
 
     private function checkAndFillVoterIfProxical(mixed $record)
     {
-        if ($record && $record->is_natural === 0) {
+        if ($record && $record->voted_type === VotedType::PROXICAL) {
             $voter = Model::where('voter_id_1', $record->id)->orWhere('voter_id_2', $record->id)->orWhere('voter_id_3', $record->id)
                 ->first();
             if ($voter) {

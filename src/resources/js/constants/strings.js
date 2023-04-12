@@ -77,6 +77,7 @@ export const sidebar = {
     mainContainer: "امکانات",
     servicesContainer: "خدمات",
     voters: "واجدین شرایط",
+    voted: "آراء اخذ شده",
     baseInformation: "اطلاعات پایه",
     systemManagement: "مدیریت سیستم",
     userContainer: "مدیریت کاربری",
@@ -158,8 +159,9 @@ export const changePasswordUserPage = {
 };
 
 export const voteTypes = {
-    naturalVoted: "رای داده / اصالتی",
-    notNaturalVoted: "رای داده / وکالتی",
+    personal: "اصالتی",
+    proxical: "وکالتی",
+    notShareholder: "غیر عضو",
     notVoted: "رای نداده",
 };
 
@@ -172,26 +174,48 @@ export const votersPage = {
     nationalCodePlaceholder: "شماره ملی",
     actions: "عملیات",
     nameFamily: "نام و نام خانوادگی",
+    votedType: "وضعیت رای‌دهی",
+    votedCount: "تعداد آراء اخذ شده",
+    vote: "رای",
+    searchSubmit: "جستجو",
+};
+
+export const votedPage = {
+    _title: "آراء اخذ شده",
+    _subTitle: "فهرست آراء اخذ شده در انتخابات شرکت",
+    name: "نام",
+    namePlaceholder: "نام",
+    nationalCode: "شماره ملی",
+    nationalCodePlaceholder: "شماره ملی",
+    actions: "عملیات",
+    nameFamily: "نام و نام خانوادگی",
     voteStatus: "وضعیت رای‌دهی",
-    votedCount: "تعداد آرای ثبت‌شده",
+    votedCount: "تعداد آراء اخذ شده",
     vote: "رای",
     searchSubmit: "جستجو",
 };
 
 export const votePage = {
-    _title: "ثبت رای",
-    _subTitle: "ثبت رای سهام‌دار",
+    _title: "اخذ رای",
+    _subTitle: "اخذ رای سهام‌دار",
     name: "نام",
+    namePlaceholder: "نام",
     family: "نام خانوادگی",
+    familyPlaceholder: "نام خانوادگی",
     nationalCode: "شماره ملی",
     nationalCodePlaceholder: "شماره ملی",
-    voteProxical: "ثبت رای وکالتی",
-    voted: "آراء وکالتی",
     voter: "رای‌دهنده",
-    actions: "عملیات",
-    nameFamily: "نام و نام خانوادگی",
-    voteStatus: "وضعیت رای‌دهی",
+    votedType: "وضعیت رای‌دهی",
+    proxicalVoterNationalCode: "شماره ملی رای‌دهنده",
+    proxicalVoterNationalCodePlaceholder: "شماره ملی رای‌دهنده",
+    notShareholderVoterNationalCode: "شماره ملی رای‌دهنده",
+    notShareholderVoterNationalCodePlaceholder: "شماره ملی رای‌دهنده",
+    notShareholderVoterName: "نام",
+    notShareholderVoterNamePlaceholder: "نام",
+    notShareholderVoterFamily: "نام خانوادگی",
+    notShareholderVoterFamilyPlaceholder: "نام خانوادگی",
+    proxicalVoted: "آراء اخذ شده وکالتی",
+    submit: "اخذ رای",
     cancel: "بازگشت",
-    submit: "ثبت رای",
-    submitted: "ثبت رای سهام‌دار با موفقیت انجام گردید.",
+    submitted: "اخذ رای سهام‌دار با موفقیت انجام گردید.",
 };

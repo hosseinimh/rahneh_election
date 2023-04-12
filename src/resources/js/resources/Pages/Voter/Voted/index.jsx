@@ -1,7 +1,11 @@
 import React from "react";
 import { useSelector } from "react-redux";
 
-import { votersPage as strings, general } from "../../../../constants/strings";
+import {
+    votedPage as strings,
+    voteTypes,
+    general,
+} from "../../../../constants/strings";
 import {
     InputTextColumn,
     ListPage,
@@ -12,7 +16,7 @@ import {
 import utils from "../../../../utils/Utils";
 import { PageUtils } from "./PageUtils";
 
-const Voters = () => {
+const Voted = () => {
     const layoutState = useSelector((state) => state.layoutReducer);
     const pageState = useSelector((state) => state.pageReducer);
     const columnsCount = 5;
@@ -41,7 +45,7 @@ const Voters = () => {
             </th>
             <th scope="col">{strings.nameFamily}</th>
             <th scope="col" style={{ width: "150px" }}>
-                {strings.votedType}
+                {strings.voteStatus}
             </th>
             <th scope="col" style={{ width: "150px" }}>
                 {strings.nationalCode}
@@ -106,4 +110,4 @@ const Voters = () => {
     );
 };
 
-export default Voters;
+export default Voted;
