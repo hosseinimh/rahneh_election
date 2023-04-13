@@ -7,6 +7,7 @@ use App\Http\Requests\Voter\IndexVotersRequest;
 use App\Http\Requests\Voter\NotShareholderVoteRequest;
 use App\Http\Requests\Voter\ProxicalVoteRequest;
 use App\Http\Requests\Voter\SearchVoterByNationalCodeRequest;
+use App\Http\Requests\Voter\VoteShareholderRequest;
 use App\Http\Resources\Voter\VoterResource;
 use App\Models\Voter as Model;
 use App\Packages\JsonResponse;
@@ -73,5 +74,10 @@ class VoterController extends Controller
     public function notShareholderVote(Model $model, NotShareholderVoteRequest $request): HttpJsonResponse
     {
         return $this->onUpdate($this->service->notShareholderVote($model, $request->national_code, $request->name, $request->family, auth()->user()->id));
+    }
+
+    public function voteForShareholder(Model $model, VoteShareholderRequest $request): HttpJsonResponse
+    {
+        return $this->onUpdate($this->service->voteForShareholder($model, $request->national_code, auth()->user()->id));
     }
 }

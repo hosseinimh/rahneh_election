@@ -10,7 +10,10 @@ const validate = (schema, field) => {
             50,
             validation.maxMessage.replace(":field", field).replace(":max", "50")
         )
-        .matches(/^[a-z]+$/, validation.stringMessage.replace(":field", field));
+        .matches(
+            /^[a-zA-Z ]+$/,
+            validation.stringMessage.replace(":field", field)
+        );
 };
 
 const nameValidator = (schema, field, required = true) => {

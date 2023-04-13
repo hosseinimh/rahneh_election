@@ -9,11 +9,19 @@ import {
 } from "../../../../state/page/pageActions";
 import { votePage as strings } from "../../../../constants/strings";
 import { BasePageUtils } from "../../../../utils/BasePageUtils";
-import { BASE_PATH, VOTED_TYPES } from "../../../../constants";
+import {
+    BASE_PATH,
+    MESSAGE_CODES,
+    MESSAGE_TYPES,
+    VOTED_TYPES,
+} from "../../../../constants";
 import { setLoadingAction } from "../../../../state/layout/layoutActions";
 import utils from "../../../../utils/Utils";
 import { voteVoterSchema as schema } from "../../../validations";
-import { clearMessageAction } from "../../../../state/message/messageActions";
+import {
+    clearMessageAction,
+    setMessageAction,
+} from "../../../../state/message/messageActions";
 
 export class PageUtils extends BasePageUtils {
     constructor() {
@@ -25,9 +33,15 @@ export class PageUtils extends BasePageUtils {
         this.initialPageProps = {
             voterId: null,
             item: null,
+            proxy: null,
+            shareholder: null,
             voteType: VOTED_TYPES.PERSONAL,
         };
         this.callbackUrl = `${BASE_PATH}/voters`;
+        this.onSearchProxy = this.onSearchProxy.bind(this);
+        this.onSearchShareholder = this.onSearchShareholder.bind(this);
+        this.onSubmitVoteForShareholder =
+            this.onSubmitVoteForShareholder.bind(this);
     }
 
     onLoad(params) {
@@ -79,7 +93,6 @@ export class PageUtils extends BasePageUtils {
 
     viewAction({ id }) {
         if (utils.isId(id)) {
-            console.log(id);
             window.history.replaceState(
                 null,
                 "",
@@ -110,6 +123,10 @@ export class PageUtils extends BasePageUtils {
 
     async fetchItem(id) {
         return await this.entity.get(id);
+    }
+
+    async fetchItemByNationalCode(nationalCode) {
+        return await this.entity.getByNationalCode(nationalCode);
     }
 
     handleFetchResult(result) {
@@ -153,6 +170,64 @@ export class PageUtils extends BasePageUtils {
                 );
             default:
                 return null;
+        }
+    }
+
+    async onSubmitVoteForShareholder(data) {
+        this.onSendRequest();
+        const result = await this.entity.voteForShareholder(
+            this.pageState?.props?.voterId,
+            data.shareholderNationalCode
+        );
+        this.handleModifyResult(result);
+        this.dispatch(
+            setPagePropsAction({ action: "REFRESH", shareholder: null })
+        );
+    }
+
+    async onSearchProxy(data) {
+        this.onSendRequest();
+        const result = await this.fetchItemByNationalCode(
+            data.proxicalVoterNationalCode
+        );
+        this.dispatch(setLoadingAction(false));
+        if (result === null) {
+            this.dispatch(setPagePropsAction({ proxy: null }));
+            this.dispatch(
+                setMessageAction(
+                    strings.shareholderNationalCodeNotFound,
+                    MESSAGE_TYPES.ERROR,
+                    MESSAGE_CODES.FORM_INPUT_INVALID,
+                    true,
+                    "proxicalVoterNationalCode"
+                )
+            );
+            return;
+        } else {
+            this.dispatch(setPagePropsAction({ proxy: result.item }));
+        }
+    }
+
+    async onSearchShareholder(data) {
+        this.onSendRequest();
+        const result = await this.fetchItemByNationalCode(
+            data.shareholderNationalCode
+        );
+        this.dispatch(setLoadingAction(false));
+        if (result === null) {
+            this.dispatch(setPagePropsAction({ shareholder: null }));
+            this.dispatch(
+                setMessageAction(
+                    strings.shareholderNationalCodeNotFound,
+                    MESSAGE_TYPES.ERROR,
+                    MESSAGE_CODES.FORM_INPUT_INVALID,
+                    true,
+                    "shareholderNationalCode"
+                )
+            );
+            return;
+        } else {
+            this.dispatch(setPagePropsAction({ shareholder: result.item }));
         }
     }
 }

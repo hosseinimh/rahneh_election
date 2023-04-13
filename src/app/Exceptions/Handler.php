@@ -57,7 +57,7 @@ class Handler extends ExceptionHandler
         HandleErrorJob::dispatch($exception);
 
         if ($request->expectsJson()) {
-            if ($exception->getCode() === 5009){
+            if ($exception->getCode() === ErrorCode::CUSTOM_ERROR) {
                 return response()->json(['_result' => '0', '_error' => $exception->getMessage(), '_errorCode' => ErrorCode::FORM_INPUT_INVALID], 200);
             }
 

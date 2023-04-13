@@ -210,6 +210,9 @@ export const votePage = {
     proxicalVoterNationalCodePlaceholder: "شماره ملی رای‌دهنده",
     notShareholderVoterNationalCode: "شماره ملی رای‌دهنده",
     notShareholderVoterNationalCodePlaceholder: "شماره ملی رای‌دهنده",
+    voteProxical: "اخذ رای به جای سهام‌دار (وکالتی)",
+    shareholderNationalCode: "شماره ملی سهام‌دار",
+    shareholderNationalCodePlaceholder: "شماره ملی سهام‌دار",
     notShareholderVoterName: "نام",
     notShareholderVoterNamePlaceholder: "نام",
     notShareholderVoterFamily: "نام خانوادگی",
@@ -218,4 +221,5 @@ export const votePage = {
     submit: "اخذ رای",
     cancel: "بازگشت",
     submitted: "اخذ رای سهام‌دار با موفقیت انجام گردید.",
+    shareholderNationalCodeNotFound: "سهام‌داری با این شماره ملی یافت نشد.",
 };

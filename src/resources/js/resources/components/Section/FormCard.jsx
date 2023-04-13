@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 
 import { general } from "../../../constants/strings";
@@ -8,6 +8,7 @@ const FormCard = ({
     pageUtils,
     hasSubmit = true,
     submitEnabled = true,
+    onSubmit = null,
     hasCancel = true,
 }) => {
     const layoutState = useSelector((state) => state.layoutReducer);
@@ -32,8 +33,8 @@ const FormCard = ({
                                                 ? pageUtils.strings["submit"]
                                                 : general.submit
                                         }
-                                        onClick={pageUtils.useForm.handleSubmit(
-                                            pageUtils.onSubmit
+                                        onClick={pageUtils?.useForm.handleSubmit(
+                                            onSubmit ?? pageUtils.onSubmit
                                         )}
                                         disabled={
                                             layoutState?.loading ||
@@ -56,7 +57,7 @@ const FormCard = ({
                                                 ? pageUtils.strings["cancel"]
                                                 : general.cancel
                                         }
-                                        onClick={pageUtils.onCancel}
+                                        onClick={pageUtils?.onCancel}
                                         disabled={layoutState?.loading}
                                     >
                                         {pageUtils?.strings &&

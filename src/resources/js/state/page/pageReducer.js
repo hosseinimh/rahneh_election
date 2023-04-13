@@ -10,6 +10,7 @@ const initialState = {
     subTitle: "",
     icon: null,
     pageUtils: null,
+    pageUtilsLoaded: false,
 };
 
 const pageReducer = (state = initialState, { type, payload }) => {
@@ -48,6 +49,11 @@ const pageReducer = (state = initialState, { type, payload }) => {
             return {
                 ...state,
                 pageUtils: payload,
+            };
+        case actions.SET_PAGE_UTILS_LOADED_ACTION:
+            return {
+                ...state,
+                pageUtilsLoaded: true,
             };
         default:
             return state;

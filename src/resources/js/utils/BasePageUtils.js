@@ -7,7 +7,10 @@ import {
     clearMessageAction,
     setMessageAction,
 } from "../state/message/messageActions";
-import { setPagePropsAction } from "../state/page/pageActions";
+import {
+    setPagePropsAction,
+    setPageUtilsLoadedAction,
+} from "../state/page/pageActions";
 import utils from "./Utils";
 
 export class BasePageUtils {
@@ -30,6 +33,7 @@ export class BasePageUtils {
 
     onLoad() {
         this.dispatch(setPagePropsAction(this.initialPageProps));
+        this.dispatch(setPageUtilsLoadedAction());
     }
 
     onSendRequest() {

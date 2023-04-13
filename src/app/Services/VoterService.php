@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Constants\ErrorCode;
 use App\Constants\VotedType;
 use App\Http\Resources\Voter\VoterResource;
 use App\Models\Voter as Model;
@@ -137,6 +138,34 @@ class VoterService
         return $model->update($data);
     }
 
+    public function voteForShareholder(Model $model, string $nationalCode, int $userId): bool
+    {
+        try {
+            $this->checkVoterVoted($model);
+            $voter = $this->getByNationalCode($nationalCode);
+            $this->checkVoterExists($voter);
+            $this->checkVotersNotSame($model, $voter);
+            $this->checkVoteOnce($voter);
+            $index = $this->getProxyIndex($model);
+            DB::beginTransaction();
+            $data = [
+                'voter_id_'.$index => $voter->id,
+            ];
+            $model->update($data);
+            $data = [
+                'voted_type' => VotedType::PROXICAL,
+                'user_id' => $userId,
+                'voted_at' => date('Y-m-d H:i:s'),
+            ];
+            $voter->update($data);
+            DB::commit();
+            return true;
+        } catch (PDOException) {
+            DB::rollBack();
+            return false;
+        }
+    }
+
     public function count(string $name, string $nationalCode): int
     {
         return Model::leftJoin('tbl_users', 'user_id', '=', 'tbl_users.id')
@@ -177,42 +206,42 @@ class VoterService
     private function checkVoterExists(mixed $voter)
     {
         if (!$voter || !($voter instanceof Voter)) {
-            throw new Exception(__('voter.voter_not_found'), 5009);
+            throw new Exception(__('voter.voter_not_found'), ErrorCode::CUSTOM_ERROR);
         }
     }
 
     private function checkVoterNotExists(mixed $voter)
     {
         if ($voter && $voter instanceof Voter) {
-            throw new Exception(__('voter.voter_found'), 5009);
+            throw new Exception(__('voter.voter_found'), ErrorCode::CUSTOM_ERROR);
         }
     }
 
     private function checkVotersNotSame(Model $model, Model $voter)
     {
         if ($model->id === $voter->id) {
-            throw new Exception(__('voter.voters_same'), 5009);
+            throw new Exception(__('voter.voters_same'), ErrorCode::CUSTOM_ERROR);
         }
     }
 
     private function checkVoteOnce(Model $model)
     {
         if ($model->voted_at) {
-            throw new Exception(__('voter.voter_voted'), 5009);
+            throw new Exception(__('voter.voter_voted'), ErrorCode::CUSTOM_ERROR);
         }
     }
 
     private function checkNotShareholderVoteOnce(Model $voter)
     {
         if ($voter && $voter instanceof Voter) {
-            throw new Exception(__('voter.not_shareholder_voter_voted'), 5009);
+            throw new Exception(__('voter.not_shareholder_voter_voted'), ErrorCode::CUSTOM_ERROR);
         }
     }
 
     private function checkVoterVoted(Model $voter)
     {
         if (!$voter->voted_at) {
-            throw new Exception(__('voter.voter_should_vote_first'), 5009);
+            throw new Exception(__('voter.voter_should_vote_first'), ErrorCode::CUSTOM_ERROR);
         }
     }
 
@@ -228,7 +257,7 @@ class VoterService
             return 3;
         }
 
-        throw new Exception(__('voter.voter_voted_proxical'), 5009);
+        throw new Exception(__('voter.voter_voted_proxical'), ErrorCode::CUSTOM_ERROR);
     }
 
     private function checkAndFillVoterIfProxical(mixed $record)

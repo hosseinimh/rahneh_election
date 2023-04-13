@@ -5,6 +5,17 @@ import { votePage as strings } from "../../../constants/strings";
 import { nameValidator, nationalCodeValidator } from "../CommonValidators";
 
 const voteVoterSchema = yup.object().shape({
+    shareholderNationalCode: yup
+        .string()
+        .when("votedType", (votedType, schema) => {
+            if (votedType == VOTED_TYPES.PERSONAL) {
+                return nationalCodeValidator(
+                    schema,
+                    strings.shareholderNationalCode
+                );
+            }
+            return schema;
+        }),
     proxicalVoterNationalCode: yup.string().when("voter", (voter, schema) => {
         if (voter == VOTED_TYPES.PROXICAL) {
             return nationalCodeValidator(

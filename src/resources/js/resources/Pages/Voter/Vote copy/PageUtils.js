@@ -113,8 +113,6 @@ export class PageUtils extends BasePageUtils {
     }
 
     async onSubmit(data) {
-        console.log(data);
-        return;
         this.onSendRequest();
         const result = await this.entity.personalVote(
             this.pageState?.props?.voterId

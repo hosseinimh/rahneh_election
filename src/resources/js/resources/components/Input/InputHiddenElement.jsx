@@ -11,14 +11,13 @@ const InputHiddenElement = ({ field, useForm, value }) => {
         }
     }, [pageState]);
 
-    return (
-        <input
-            id={field}
-            {...form?.register(`${field}`)}
-            type="hidden"
-            value={value}
-        />
-    );
+    useEffect(() => {
+        if (form) {
+            form.setValue(field, value);
+        }
+    }, [value]);
+
+    return <input id={field} {...form?.register(`${field}`)} type="hidden" />;
 };
 
 export default InputHiddenElement;

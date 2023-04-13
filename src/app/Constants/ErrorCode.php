@@ -15,4 +15,5 @@ abstract class ErrorCode
     const ITEM_NOT_FOUND = 9;
     const UPDATE_ERROR = 10;
     const DELETE_ERROR = 11;
+    const CUSTOM_ERROR = 5009;
 }

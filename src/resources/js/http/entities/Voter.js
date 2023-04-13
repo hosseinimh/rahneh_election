@@ -59,4 +59,13 @@ export class Voter extends Entity {
             }
         );
     }
+
+    async voteForShareholder(id, nationalCode) {
+        return await this.handlePost(
+            `${BASE_URL}/a/voters/vote_shareholder/${id}`,
+            {
+                national_code: nationalCode,
+            }
+        );
+    }
 }

@@ -6667,6 +6667,9 @@ var votePage = {
   proxicalVoterNationalCodePlaceholder: "شماره ملی رای‌دهنده",
   notShareholderVoterNationalCode: "شماره ملی رای‌دهنده",
   notShareholderVoterNationalCodePlaceholder: "شماره ملی رای‌دهنده",
+  voteProxical: "اخذ رای به جای سهام‌دار (وکالتی)",
+  shareholderNationalCode: "شماره ملی سهام‌دار",
+  shareholderNationalCodePlaceholder: "شماره ملی سهام‌دار",
   notShareholderVoterName: "نام",
   notShareholderVoterNamePlaceholder: "نام",
   notShareholderVoterFamily: "نام خانوادگی",
@@ -6674,7 +6677,8 @@ var votePage = {
   proxicalVoted: "آراء اخذ شده وکالتی",
   submit: "اخذ رای",
   cancel: "بازگشت",
-  submitted: "اخذ رای سهام‌دار با موفقیت انجام گردید."
+  submitted: "اخذ رای سهام‌دار با موفقیت انجام گردید.",
+  shareholderNationalCodeNotFound: "سهام‌داری با این شماره ملی یافت نشد."
 };
 
 /***/ }),
@@ -7617,6 +7621,30 @@ var Voter = /*#__PURE__*/function (_Entity) {
         return _notShareholderVote.apply(this, arguments);
       }
       return notShareholderVote;
+    }()
+  }, {
+    key: "voteForShareholder",
+    value: function () {
+      var _voteForShareholder = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee8(id, nationalCode) {
+        return _regeneratorRuntime().wrap(function _callee8$(_context8) {
+          while (1) switch (_context8.prev = _context8.next) {
+            case 0:
+              _context8.next = 2;
+              return this.handlePost("".concat(_constants__WEBPACK_IMPORTED_MODULE_0__.BASE_URL, "/a/voters/vote_shareholder/").concat(id), {
+                national_code: nationalCode
+              });
+            case 2:
+              return _context8.abrupt("return", _context8.sent);
+            case 3:
+            case "end":
+              return _context8.stop();
+          }
+        }, _callee8, this);
+      }));
+      function voteForShareholder(_x14, _x15) {
+        return _voteForShareholder.apply(this, arguments);
+      }
+      return voteForShareholder;
     }()
   }]);
   return Voter;
@@ -9223,9 +9251,14 @@ var PageUtils = /*#__PURE__*/function (_BasePageUtils) {
     _this.initialPageProps = {
       voterId: null,
       item: null,
+      proxy: null,
+      shareholder: null,
       voteType: _constants__WEBPACK_IMPORTED_MODULE_5__.VOTED_TYPES.PERSONAL
     };
     _this.callbackUrl = "".concat(_constants__WEBPACK_IMPORTED_MODULE_5__.BASE_PATH, "/voters");
+    _this.onSearchProxy = _this.onSearchProxy.bind(_assertThisInitialized(_this));
+    _this.onSearchShareholder = _this.onSearchShareholder.bind(_assertThisInitialized(_this));
+    _this.onSubmitVoteForShareholder = _this.onSubmitVoteForShareholder.bind(_assertThisInitialized(_this));
     return _this;
   }
   _createClass(PageUtils, [{
@@ -9276,7 +9309,6 @@ var PageUtils = /*#__PURE__*/function (_BasePageUtils) {
     value: function viewAction(_ref) {
       var id = _ref.id;
       if (_utils_Utils__WEBPACK_IMPORTED_MODULE_7__["default"].isId(id)) {
-        console.log(id);
         window.history.replaceState(null, "", "".concat(_constants__WEBPACK_IMPORTED_MODULE_5__.BASE_PATH, "/voters/vote/").concat(id));
         this.fillForm({
           voterId: id
@@ -9353,6 +9385,28 @@ var PageUtils = /*#__PURE__*/function (_BasePageUtils) {
       return fetchItem;
     }()
   }, {
+    key: "fetchItemByNationalCode",
+    value: function () {
+      var _fetchItemByNationalCode = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3(nationalCode) {
+        return _regeneratorRuntime().wrap(function _callee3$(_context3) {
+          while (1) switch (_context3.prev = _context3.next) {
+            case 0:
+              _context3.next = 2;
+              return this.entity.getByNationalCode(nationalCode);
+            case 2:
+              return _context3.abrupt("return", _context3.sent);
+            case 3:
+            case "end":
+              return _context3.stop();
+          }
+        }, _callee3, this);
+      }));
+      function fetchItemByNationalCode(_x3) {
+        return _fetchItemByNationalCode.apply(this, arguments);
+      }
+      return fetchItemByNationalCode;
+    }()
+  }, {
     key: "handleFetchResult",
     value: function handleFetchResult(result) {
       this.dispatch((0,_state_page_pageActions__WEBPACK_IMPORTED_MODULE_2__.setPagePropsAction)({
@@ -9364,28 +9418,28 @@ var PageUtils = /*#__PURE__*/function (_BasePageUtils) {
   }, {
     key: "onSubmit",
     value: function () {
-      var _onSubmit = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3(data) {
+      var _onSubmit = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4(data) {
         var _this$pageState, _this$pageState$props;
         var result;
-        return _regeneratorRuntime().wrap(function _callee3$(_context3) {
-          while (1) switch (_context3.prev = _context3.next) {
+        return _regeneratorRuntime().wrap(function _callee4$(_context4) {
+          while (1) switch (_context4.prev = _context4.next) {
             case 0:
               this.onSendRequest();
-              _context3.next = 3;
+              _context4.next = 3;
               return this.vote((_this$pageState = this.pageState) === null || _this$pageState === void 0 ? void 0 : (_this$pageState$props = _this$pageState.props) === null || _this$pageState$props === void 0 ? void 0 : _this$pageState$props.voteType, data);
             case 3:
-              result = _context3.sent;
+              result = _context4.sent;
               this.handleModifyResult(result);
               this.dispatch((0,_state_page_pageActions__WEBPACK_IMPORTED_MODULE_2__.setPagePropsAction)({
                 action: "REFRESH"
               }));
             case 6:
             case "end":
-              return _context3.stop();
+              return _context4.stop();
           }
-        }, _callee3, this);
+        }, _callee4, this);
       }));
-      function onSubmit(_x3) {
+      function onSubmit(_x4) {
         return _onSubmit.apply(this, arguments);
       }
       return onSubmit;
@@ -9393,43 +9447,149 @@ var PageUtils = /*#__PURE__*/function (_BasePageUtils) {
   }, {
     key: "vote",
     value: function () {
-      var _vote = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4(voteType, data) {
+      var _vote = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee5(voteType, data) {
         var _this$pageState2, _this$pageState2$prop, _this$pageState3, _this$pageState3$prop, _this$pageState4, _this$pageState4$prop;
-        return _regeneratorRuntime().wrap(function _callee4$(_context4) {
-          while (1) switch (_context4.prev = _context4.next) {
+        return _regeneratorRuntime().wrap(function _callee5$(_context5) {
+          while (1) switch (_context5.prev = _context5.next) {
             case 0:
-              _context4.t0 = voteType;
-              _context4.next = _context4.t0 === _constants__WEBPACK_IMPORTED_MODULE_5__.VOTED_TYPES.PERSONAL ? 3 : _context4.t0 === _constants__WEBPACK_IMPORTED_MODULE_5__.VOTED_TYPES.PROXICAL ? 6 : _context4.t0 === _constants__WEBPACK_IMPORTED_MODULE_5__.VOTED_TYPES.NOT_SHAREHOLDER ? 10 : 14;
+              _context5.t0 = voteType;
+              _context5.next = _context5.t0 === _constants__WEBPACK_IMPORTED_MODULE_5__.VOTED_TYPES.PERSONAL ? 3 : _context5.t0 === _constants__WEBPACK_IMPORTED_MODULE_5__.VOTED_TYPES.PROXICAL ? 6 : _context5.t0 === _constants__WEBPACK_IMPORTED_MODULE_5__.VOTED_TYPES.NOT_SHAREHOLDER ? 10 : 14;
               break;
             case 3:
-              _context4.next = 5;
+              _context5.next = 5;
               return this.entity.personalVote((_this$pageState2 = this.pageState) === null || _this$pageState2 === void 0 ? void 0 : (_this$pageState2$prop = _this$pageState2.props) === null || _this$pageState2$prop === void 0 ? void 0 : _this$pageState2$prop.voterId);
             case 5:
-              return _context4.abrupt("return", _context4.sent);
+              return _context5.abrupt("return", _context5.sent);
             case 6:
               this.messageField = "proxicalVoterNationalCode";
-              _context4.next = 9;
+              _context5.next = 9;
               return this.entity.proxicalVote((_this$pageState3 = this.pageState) === null || _this$pageState3 === void 0 ? void 0 : (_this$pageState3$prop = _this$pageState3.props) === null || _this$pageState3$prop === void 0 ? void 0 : _this$pageState3$prop.voterId, data.proxicalVoterNationalCode);
             case 9:
-              return _context4.abrupt("return", _context4.sent);
+              return _context5.abrupt("return", _context5.sent);
             case 10:
               this.messageField = "notShareholderVoterNationalCode";
-              _context4.next = 13;
+              _context5.next = 13;
               return this.entity.notShareholderVote((_this$pageState4 = this.pageState) === null || _this$pageState4 === void 0 ? void 0 : (_this$pageState4$prop = _this$pageState4.props) === null || _this$pageState4$prop === void 0 ? void 0 : _this$pageState4$prop.voterId, data.notShareholderVoterNationalCode, data.notShareholderVoterName, data.notShareholderVoterFamily);
             case 13:
-              return _context4.abrupt("return", _context4.sent);
+              return _context5.abrupt("return", _context5.sent);
             case 14:
-              return _context4.abrupt("return", null);
+              return _context5.abrupt("return", null);
             case 15:
             case "end":
-              return _context4.stop();
+              return _context5.stop();
           }
-        }, _callee4, this);
+        }, _callee5, this);
       }));
-      function vote(_x4, _x5) {
+      function vote(_x5, _x6) {
         return _vote.apply(this, arguments);
       }
       return vote;
+    }()
+  }, {
+    key: "onSubmitVoteForShareholder",
+    value: function () {
+      var _onSubmitVoteForShareholder = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee6(data) {
+        var _this$pageState5, _this$pageState5$prop;
+        var result;
+        return _regeneratorRuntime().wrap(function _callee6$(_context6) {
+          while (1) switch (_context6.prev = _context6.next) {
+            case 0:
+              this.onSendRequest();
+              _context6.next = 3;
+              return this.entity.voteForShareholder((_this$pageState5 = this.pageState) === null || _this$pageState5 === void 0 ? void 0 : (_this$pageState5$prop = _this$pageState5.props) === null || _this$pageState5$prop === void 0 ? void 0 : _this$pageState5$prop.voterId, data.shareholderNationalCode);
+            case 3:
+              result = _context6.sent;
+              this.handleModifyResult(result);
+              this.dispatch((0,_state_page_pageActions__WEBPACK_IMPORTED_MODULE_2__.setPagePropsAction)({
+                action: "REFRESH",
+                shareholder: null
+              }));
+            case 6:
+            case "end":
+              return _context6.stop();
+          }
+        }, _callee6, this);
+      }));
+      function onSubmitVoteForShareholder(_x7) {
+        return _onSubmitVoteForShareholder.apply(this, arguments);
+      }
+      return onSubmitVoteForShareholder;
+    }()
+  }, {
+    key: "onSearchProxy",
+    value: function () {
+      var _onSearchProxy = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee7(data) {
+        var result;
+        return _regeneratorRuntime().wrap(function _callee7$(_context7) {
+          while (1) switch (_context7.prev = _context7.next) {
+            case 0:
+              this.onSendRequest();
+              _context7.next = 3;
+              return this.fetchItemByNationalCode(data.proxicalVoterNationalCode);
+            case 3:
+              result = _context7.sent;
+              this.dispatch((0,_state_layout_layoutActions__WEBPACK_IMPORTED_MODULE_6__.setLoadingAction)(false));
+              if (!(result === null)) {
+                _context7.next = 11;
+                break;
+              }
+              this.dispatch((0,_state_page_pageActions__WEBPACK_IMPORTED_MODULE_2__.setPagePropsAction)({
+                proxy: null
+              }));
+              this.dispatch((0,_state_message_messageActions__WEBPACK_IMPORTED_MODULE_9__.setMessageAction)(_constants_strings__WEBPACK_IMPORTED_MODULE_3__.votePage.shareholderNationalCodeNotFound, _constants__WEBPACK_IMPORTED_MODULE_5__.MESSAGE_TYPES.ERROR, _constants__WEBPACK_IMPORTED_MODULE_5__.MESSAGE_CODES.FORM_INPUT_INVALID, true, "proxicalVoterNationalCode"));
+              return _context7.abrupt("return");
+            case 11:
+              this.dispatch((0,_state_page_pageActions__WEBPACK_IMPORTED_MODULE_2__.setPagePropsAction)({
+                proxy: result.item
+              }));
+            case 12:
+            case "end":
+              return _context7.stop();
+          }
+        }, _callee7, this);
+      }));
+      function onSearchProxy(_x8) {
+        return _onSearchProxy.apply(this, arguments);
+      }
+      return onSearchProxy;
+    }()
+  }, {
+    key: "onSearchShareholder",
+    value: function () {
+      var _onSearchShareholder = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee8(data) {
+        var result;
+        return _regeneratorRuntime().wrap(function _callee8$(_context8) {
+          while (1) switch (_context8.prev = _context8.next) {
+            case 0:
+              this.onSendRequest();
+              _context8.next = 3;
+              return this.fetchItemByNationalCode(data.shareholderNationalCode);
+            case 3:
+              result = _context8.sent;
+              this.dispatch((0,_state_layout_layoutActions__WEBPACK_IMPORTED_MODULE_6__.setLoadingAction)(false));
+              if (!(result === null)) {
+                _context8.next = 11;
+                break;
+              }
+              this.dispatch((0,_state_page_pageActions__WEBPACK_IMPORTED_MODULE_2__.setPagePropsAction)({
+                shareholder: null
+              }));
+              this.dispatch((0,_state_message_messageActions__WEBPACK_IMPORTED_MODULE_9__.setMessageAction)(_constants_strings__WEBPACK_IMPORTED_MODULE_3__.votePage.shareholderNationalCodeNotFound, _constants__WEBPACK_IMPORTED_MODULE_5__.MESSAGE_TYPES.ERROR, _constants__WEBPACK_IMPORTED_MODULE_5__.MESSAGE_CODES.FORM_INPUT_INVALID, true, "shareholderNationalCode"));
+              return _context8.abrupt("return");
+            case 11:
+              this.dispatch((0,_state_page_pageActions__WEBPACK_IMPORTED_MODULE_2__.setPagePropsAction)({
+                shareholder: result.item
+              }));
+            case 12:
+            case "end":
+              return _context8.stop();
+          }
+        }, _callee8, this);
+      }));
+      function onSearchShareholder(_x9) {
+        return _onSearchShareholder.apply(this, arguments);
+      }
+      return onSearchShareholder;
     }()
   }]);
   return PageUtils;
@@ -9467,7 +9627,6 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-
 var voteTyeItems = [{
   id: _constants__WEBPACK_IMPORTED_MODULE_5__.VOTED_TYPES.PERSONAL,
   value: _constants_strings__WEBPACK_IMPORTED_MODULE_4__.voteTypes.personal
@@ -9479,7 +9638,7 @@ var voteTyeItems = [{
   value: _constants_strings__WEBPACK_IMPORTED_MODULE_4__.voteTypes.notShareholder
 }];
 var Vote = function Vote() {
-  var _pageState$props, _pageState$props$item, _pageState$props$item2, _pageState$props32, _pageState$props32$it, _pageState$props33, _pageState$props33$it, _pageState$props34, _pageState$props34$it, _pageState$props35, _pageState$props35$it, _pageState$props37, _pageState$props37$it, _pageState$props37$it2, _pageState$props38, _pageState$props38$it, _pageState$props38$it2, _pageState$props39, _pageState$props39$it, _pageState$props39$it2, _pageState$props40, _pageState$props40$it, _pageState$props41, _pageState$props41$it, _pageState$props42, _pageState$props42$it, _pageState$props43, _pageState$props43$it, _pageState$props44, _pageState$props44$it, _pageState$props45, _pageState$props45$it;
+  var _pageState$props, _pageState$props$item, _pageState$props$item2, _pageState$props31, _pageState$props31$it, _pageState$props32, _pageState$props32$it, _pageState$props33, _pageState$props33$it, _pageState$props34, _pageState$props34$it, _pageState$props36, _pageState$props36$it, _pageState$props36$it2, _pageState$props37, _pageState$props37$it, _pageState$props37$it2, _pageState$props38, _pageState$props38$it, _pageState$props38$it2, _pageState$props39, _pageState$props39$it, _pageState$props40, _pageState$props40$it, _pageState$props41, _pageState$props41$it, _pageState$props42, _pageState$props42$it, _pageState$props43, _pageState$props43$it, _pageState$props44, _pageState$props44$it, _pageState$props45, _pageState$props45$it, _pageState$props46, _pageState$props46$it, _pageState$props47, _pageState$props47$it;
   var layoutState = (0,react_redux__WEBPACK_IMPORTED_MODULE_1__.useSelector)(function (state) {
     return state.layoutReducer;
   });
@@ -9511,56 +9670,90 @@ var Vote = function Vote() {
     }
     return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.Fragment, {});
   };
-  var renderVoterInfo = function renderVoterInfo() {
-    var _pageState$props4, _pageState$props5, _pageState$props5$ite;
-    if (pageState !== null && pageState !== void 0 && (_pageState$props4 = pageState.props) !== null && _pageState$props4 !== void 0 && _pageState$props4.item && pageState !== null && pageState !== void 0 && (_pageState$props5 = pageState.props) !== null && _pageState$props5 !== void 0 && (_pageState$props5$ite = _pageState$props5.item) !== null && _pageState$props5$ite !== void 0 && _pageState$props5$ite.votedAt) {
-      return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("div", {
-        className: "col-md-6 col-12 pb-4",
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)(_components__WEBPACK_IMPORTED_MODULE_2__.Span, {
-          children: [pageState.props.item.votedAtFa, " - [", " ", pageState.props.item.username, " ]"]
-        })
-      });
-    }
-    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.Fragment, {});
-  };
   var renderProxicalVoter = function renderProxicalVoter() {
-    var _pageState$props6, _pageState$props6$ite, _pageState$props7;
-    if (!(pageState !== null && pageState !== void 0 && (_pageState$props6 = pageState.props) !== null && _pageState$props6 !== void 0 && (_pageState$props6$ite = _pageState$props6.item) !== null && _pageState$props6$ite !== void 0 && _pageState$props6$ite.votedAt) && (pageState === null || pageState === void 0 ? void 0 : (_pageState$props7 = pageState.props) === null || _pageState$props7 === void 0 ? void 0 : _pageState$props7.voteType) === _constants__WEBPACK_IMPORTED_MODULE_5__.VOTED_TYPES.PROXICAL) {
-      return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("div", {
-        className: "col-12",
-        style: {
-          borderTop: "1px solid rgba(26, 54, 126, 0.125)"
-        },
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
-          className: "row pt-4",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_components__WEBPACK_IMPORTED_MODULE_2__.InputTextColumn, {
-            field: "proxicalVoterNationalCode",
-            inputStyle: {
-              textAlign: "left",
-              direction: "ltr"
-            }
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("div", {
-            className: "col pr-0 d-flex align-items-center",
-            style: {
-              marginBottom: "10px"
-            },
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("button", {
-              className: "btn btn-warning px-4 ml-2",
-              type: "button",
-              title: _constants_strings__WEBPACK_IMPORTED_MODULE_4__.general.search,
-              onClick: pageUtils.useForm.handleSubmit(pageUtils.onSearch),
-              disabled: layoutState === null || layoutState === void 0 ? void 0 : layoutState.loading,
-              children: _constants_strings__WEBPACK_IMPORTED_MODULE_4__.general.search
-            })
+    var _pageState$props4, _pageState$props4$ite, _pageState$props5;
+    if (!(pageState !== null && pageState !== void 0 && (_pageState$props4 = pageState.props) !== null && _pageState$props4 !== void 0 && (_pageState$props4$ite = _pageState$props4.item) !== null && _pageState$props4$ite !== void 0 && _pageState$props4$ite.votedAt) && (pageState === null || pageState === void 0 ? void 0 : (_pageState$props5 = pageState.props) === null || _pageState$props5 === void 0 ? void 0 : _pageState$props5.voteType) === _constants__WEBPACK_IMPORTED_MODULE_5__.VOTED_TYPES.PROXICAL) {
+      var _pageState$props6;
+      return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.Fragment, {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("div", {
+          className: "col-12",
+          style: {
+            borderTop: "1px solid rgba(26, 54, 126, 0.125)"
+          },
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
+            className: "row pt-4",
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_components__WEBPACK_IMPORTED_MODULE_2__.InputTextColumn, {
+              field: "proxicalVoterNationalCode",
+              inputStyle: {
+                textAlign: "left",
+                direction: "ltr"
+              }
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("div", {
+              className: "col pr-0 d-flex align-items-center",
+              style: {
+                marginBottom: "10px"
+              },
+              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("button", {
+                className: "btn btn-warning px-4 ml-2",
+                type: "button",
+                title: _constants_strings__WEBPACK_IMPORTED_MODULE_4__.general.search,
+                onClick: pageUtils.useForm.handleSubmit(pageUtils.onSearchProxy),
+                disabled: layoutState === null || layoutState === void 0 ? void 0 : layoutState.loading,
+                children: _constants_strings__WEBPACK_IMPORTED_MODULE_4__.general.search
+              })
+            })]
+          })
+        }), (pageState === null || pageState === void 0 ? void 0 : (_pageState$props6 = pageState.props) === null || _pageState$props6 === void 0 ? void 0 : _pageState$props6.proxy) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.Fragment, {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
+            className: "col-md-4 col-12 pb-4",
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("label", {
+              className: "form-label ml-2",
+              children: [_constants_strings__WEBPACK_IMPORTED_MODULE_4__.votePage.name, ":"]
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_components__WEBPACK_IMPORTED_MODULE_2__.Span, {
+              children: pageState.props.proxy.name
+            })]
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
+            className: "col-md-4 col-12 pb-4",
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("label", {
+              className: "form-label ml-2",
+              children: [_constants_strings__WEBPACK_IMPORTED_MODULE_4__.votePage.family, ":"]
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_components__WEBPACK_IMPORTED_MODULE_2__.Span, {
+              children: pageState.props.proxy.family
+            })]
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
+            className: "col-md-4 col-12 pb-4",
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("label", {
+              className: "form-label ml-2",
+              children: [_constants_strings__WEBPACK_IMPORTED_MODULE_4__.votePage.nationalCode, ":"]
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_components__WEBPACK_IMPORTED_MODULE_2__.Span, {
+              children: pageState.props.proxy.nationalCode
+            })]
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
+            className: "col-12 pb-4",
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("span", {
+              className: "ml-2",
+              children: [_constants_strings__WEBPACK_IMPORTED_MODULE_4__.votePage.votedType, ":"]
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_components__WEBPACK_IMPORTED_MODULE_2__.Span, {
+              spanStyle: {
+                color: pageState.props.proxy.votedAt ? "green" : "rgb(133 95 4)"
+              },
+              children: pageState.props.proxy.votedTypeText
+            }), pageState.props.proxy.votedAt && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.Fragment, {
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_components__WEBPACK_IMPORTED_MODULE_2__.Span, {
+                children: pageState.props.item.votedAtFa
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)(_components__WEBPACK_IMPORTED_MODULE_2__.Span, {
+                children: ["[ ", pageState.props.item.username, " ]"]
+              })]
+            })]
           })]
-        })
+        })]
       });
     }
     return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.Fragment, {});
   };
   var renderNotShareholderVoter = function renderNotShareholderVoter() {
-    var _pageState$props8, _pageState$props8$ite, _pageState$props9;
-    if (!(pageState !== null && pageState !== void 0 && (_pageState$props8 = pageState.props) !== null && _pageState$props8 !== void 0 && (_pageState$props8$ite = _pageState$props8.item) !== null && _pageState$props8$ite !== void 0 && _pageState$props8$ite.votedAt) && (pageState === null || pageState === void 0 ? void 0 : (_pageState$props9 = pageState.props) === null || _pageState$props9 === void 0 ? void 0 : _pageState$props9.voteType) === _constants__WEBPACK_IMPORTED_MODULE_5__.VOTED_TYPES.NOT_SHAREHOLDER) {
+    var _pageState$props7, _pageState$props7$ite, _pageState$props8;
+    if (!(pageState !== null && pageState !== void 0 && (_pageState$props7 = pageState.props) !== null && _pageState$props7 !== void 0 && (_pageState$props7$ite = _pageState$props7.item) !== null && _pageState$props7$ite !== void 0 && _pageState$props7$ite.votedAt) && (pageState === null || pageState === void 0 ? void 0 : (_pageState$props8 = pageState.props) === null || _pageState$props8 === void 0 ? void 0 : _pageState$props8.voteType) === _constants__WEBPACK_IMPORTED_MODULE_5__.VOTED_TYPES.NOT_SHAREHOLDER) {
       return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("div", {
         className: "col-12",
         style: {
@@ -9584,81 +9777,84 @@ var Vote = function Vote() {
     }
     return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.Fragment, {});
   };
-  var renderShareholder = function renderShareholder() {
-    var _pageState$props10, _pageState$props10$it, _pageState$props11, _pageState$props11$it, _pageState$props12, _pageState$props12$it;
-    if (pageState !== null && pageState !== void 0 && (_pageState$props10 = pageState.props) !== null && _pageState$props10 !== void 0 && (_pageState$props10$it = _pageState$props10.item) !== null && _pageState$props10$it !== void 0 && _pageState$props10$it.votedAt && (pageState === null || pageState === void 0 ? void 0 : (_pageState$props11 = pageState.props) === null || _pageState$props11 === void 0 ? void 0 : (_pageState$props11$it = _pageState$props11.item) === null || _pageState$props11$it === void 0 ? void 0 : _pageState$props11$it.votedType) === _constants__WEBPACK_IMPORTED_MODULE_5__.VOTED_TYPES.PERSONAL && (pageState === null || pageState === void 0 ? void 0 : (_pageState$props12 = pageState.props) === null || _pageState$props12 === void 0 ? void 0 : (_pageState$props12$it = _pageState$props12.item) === null || _pageState$props12$it === void 0 ? void 0 : _pageState$props12$it.proxicalCount) < 3) {
-      var _pageState$props13, _pageState$props14, _pageState$props14$pr, _pageState$props15, _pageState$props15$it, _pageState$props16;
-      return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)(_components__WEBPACK_IMPORTED_MODULE_2__.FormCard, {
-        pageUtils: pageUtils,
-        hasSubmit: (pageState === null || pageState === void 0 ? void 0 : (_pageState$props13 = pageState.props) === null || _pageState$props13 === void 0 ? void 0 : _pageState$props13.proxy) && !pageState.props.proxy.votedAt && (pageState === null || pageState === void 0 ? void 0 : (_pageState$props14 = pageState.props) === null || _pageState$props14 === void 0 ? void 0 : (_pageState$props14$pr = _pageState$props14.proxy) === null || _pageState$props14$pr === void 0 ? void 0 : _pageState$props14$pr.id) !== (pageState === null || pageState === void 0 ? void 0 : (_pageState$props15 = pageState.props) === null || _pageState$props15 === void 0 ? void 0 : (_pageState$props15$it = _pageState$props15.item) === null || _pageState$props15$it === void 0 ? void 0 : _pageState$props15$it.id),
-        hasCancel: false,
+  var renderVoteProxical = function renderVoteProxical() {
+    var _pageState$props9, _pageState$props9$ite, _pageState$props10, _pageState$props10$it, _pageState$props11, _pageState$props11$it;
+    if (pageState !== null && pageState !== void 0 && (_pageState$props9 = pageState.props) !== null && _pageState$props9 !== void 0 && (_pageState$props9$ite = _pageState$props9.item) !== null && _pageState$props9$ite !== void 0 && _pageState$props9$ite.votedAt && (pageState === null || pageState === void 0 ? void 0 : (_pageState$props10 = pageState.props) === null || _pageState$props10 === void 0 ? void 0 : (_pageState$props10$it = _pageState$props10.item) === null || _pageState$props10$it === void 0 ? void 0 : _pageState$props10$it.votedType) === _constants__WEBPACK_IMPORTED_MODULE_5__.VOTED_TYPES.PERSONAL && (pageState === null || pageState === void 0 ? void 0 : (_pageState$props11 = pageState.props) === null || _pageState$props11 === void 0 ? void 0 : (_pageState$props11$it = _pageState$props11.item) === null || _pageState$props11$it === void 0 ? void 0 : _pageState$props11$it.proxicalCount) < 3) {
+      var _pageState$props12, _pageState$props13, _pageState$props13$sh, _pageState$props14, _pageState$props14$it, _pageState$props15;
+      return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.Fragment, {
         children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("h6", {
           children: _constants_strings__WEBPACK_IMPORTED_MODULE_4__.votePage.voteProxical
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("div", {
-          className: "col-12 pt-4",
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
-            className: "row",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_components__WEBPACK_IMPORTED_MODULE_2__.InputTextColumn, {
-              field: "nationalCode",
-              inputStyle: {
-                textAlign: "left",
-                direction: "ltr"
-              }
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("div", {
-              className: "col pr-0 d-flex align-items-center",
-              style: {
-                marginBottom: "10px"
-              },
-              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("button", {
-                className: "btn btn-warning px-4 ml-2",
-                type: "button",
-                title: _constants_strings__WEBPACK_IMPORTED_MODULE_4__.general.search,
-                onClick: pageUtils.useForm.handleSubmit(pageUtils.onSearch),
-                disabled: layoutState === null || layoutState === void 0 ? void 0 : layoutState.loading,
-                children: _constants_strings__WEBPACK_IMPORTED_MODULE_4__.general.search
-              })
-            })]
-          })
-        }), (pageState === null || pageState === void 0 ? void 0 : (_pageState$props16 = pageState.props) === null || _pageState$props16 === void 0 ? void 0 : _pageState$props16.proxy) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.Fragment, {
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
-            className: "col-md-3 col-12 pb-4",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("label", {
-              className: "form-label ml-2",
-              children: [_constants_strings__WEBPACK_IMPORTED_MODULE_4__.votePage.name, ":"]
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_components__WEBPACK_IMPORTED_MODULE_2__.Span, {
-              children: pageState.props.proxy.name
-            })]
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
-            className: "col-md-3 col-12 pb-4",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("label", {
-              className: "form-label ml-2",
-              children: [_constants_strings__WEBPACK_IMPORTED_MODULE_4__.votePage.family, ":"]
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_components__WEBPACK_IMPORTED_MODULE_2__.Span, {
-              children: pageState.props.proxy.family
-            })]
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
-            className: "col-md-3 col-12 pb-4",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("label", {
-              className: "form-label ml-2",
-              children: [_constants_strings__WEBPACK_IMPORTED_MODULE_4__.votePage.nationalCode, ":"]
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_components__WEBPACK_IMPORTED_MODULE_2__.Span, {
-              children: pageState.props.proxy.nationalCode
-            })]
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
-            className: "col-12 pb-4",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("span", {
-              className: "ml-2",
-              children: [_constants_strings__WEBPACK_IMPORTED_MODULE_4__.votePage.votedType, ":"]
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_components__WEBPACK_IMPORTED_MODULE_2__.Span, {
-              spanStyle: {
-                color: pageState.props.proxy.votedAt ? "green" : "rgb(133 95 4)"
-              },
-              children: pageState.props.proxy.votedTypeText
-            }), pageState.props.proxy.votedAt && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.Fragment, {
-              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_components__WEBPACK_IMPORTED_MODULE_2__.Span, {
-                children: pageState.props.item.votedAtFa
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)(_components__WEBPACK_IMPORTED_MODULE_2__.Span, {
-                children: ["[ ", pageState.props.item.username, " ]"]
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)(_components__WEBPACK_IMPORTED_MODULE_2__.FormCard, {
+          pageUtils: pageUtils,
+          hasSubmit: (pageState === null || pageState === void 0 ? void 0 : (_pageState$props12 = pageState.props) === null || _pageState$props12 === void 0 ? void 0 : _pageState$props12.shareholder) && !pageState.props.shareholder.votedAt && (pageState === null || pageState === void 0 ? void 0 : (_pageState$props13 = pageState.props) === null || _pageState$props13 === void 0 ? void 0 : (_pageState$props13$sh = _pageState$props13.shareholder) === null || _pageState$props13$sh === void 0 ? void 0 : _pageState$props13$sh.id) !== (pageState === null || pageState === void 0 ? void 0 : (_pageState$props14 = pageState.props) === null || _pageState$props14 === void 0 ? void 0 : (_pageState$props14$it = _pageState$props14.item) === null || _pageState$props14$it === void 0 ? void 0 : _pageState$props14$it.id),
+          onSubmit: pageUtils === null || pageUtils === void 0 ? void 0 : pageUtils.onSubmitVoteForShareholder,
+          hasCancel: false,
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("div", {
+            className: "col-12 pt-4",
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
+              className: "row",
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_components__WEBPACK_IMPORTED_MODULE_2__.InputTextColumn, {
+                field: "shareholderNationalCode",
+                inputStyle: {
+                  textAlign: "left",
+                  direction: "ltr"
+                }
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("div", {
+                className: "col pr-0 d-flex align-items-center",
+                style: {
+                  marginBottom: "10px"
+                },
+                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("button", {
+                  className: "btn btn-warning px-4 ml-2",
+                  type: "button",
+                  title: _constants_strings__WEBPACK_IMPORTED_MODULE_4__.general.search,
+                  onClick: pageUtils.useForm.handleSubmit(pageUtils.onSearchShareholder),
+                  disabled: layoutState === null || layoutState === void 0 ? void 0 : layoutState.loading,
+                  children: _constants_strings__WEBPACK_IMPORTED_MODULE_4__.general.search
+                })
+              })]
+            })
+          }), (pageState === null || pageState === void 0 ? void 0 : (_pageState$props15 = pageState.props) === null || _pageState$props15 === void 0 ? void 0 : _pageState$props15.shareholder) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.Fragment, {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
+              className: "col-md-3 col-12 pb-4",
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("label", {
+                className: "form-label ml-2",
+                children: [_constants_strings__WEBPACK_IMPORTED_MODULE_4__.votePage.name, ":"]
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_components__WEBPACK_IMPORTED_MODULE_2__.Span, {
+                children: pageState.props.shareholder.name
+              })]
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
+              className: "col-md-3 col-12 pb-4",
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("label", {
+                className: "form-label ml-2",
+                children: [_constants_strings__WEBPACK_IMPORTED_MODULE_4__.votePage.family, ":"]
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_components__WEBPACK_IMPORTED_MODULE_2__.Span, {
+                children: pageState.props.shareholder.family
+              })]
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
+              className: "col-md-3 col-12 pb-4",
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("label", {
+                className: "form-label ml-2",
+                children: [_constants_strings__WEBPACK_IMPORTED_MODULE_4__.votePage.nationalCode, ":"]
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_components__WEBPACK_IMPORTED_MODULE_2__.Span, {
+                children: pageState.props.shareholder.nationalCode
+              })]
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
+              className: "col-12 pb-4",
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("span", {
+                className: "ml-2",
+                children: [_constants_strings__WEBPACK_IMPORTED_MODULE_4__.votePage.votedType, ":"]
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_components__WEBPACK_IMPORTED_MODULE_2__.Span, {
+                spanStyle: {
+                  color: pageState.props.shareholder.votedAt ? "green" : "rgb(133 95 4)"
+                },
+                children: pageState.props.shareholder.votedTypeText
+              }), pageState.props.shareholder.votedAt && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.Fragment, {
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_components__WEBPACK_IMPORTED_MODULE_2__.Span, {
+                  children: pageState.props.item.votedAtFa
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)(_components__WEBPACK_IMPORTED_MODULE_2__.Span, {
+                  children: ["[", " ", pageState.props.item.username, " ", "]"]
+                })]
               })]
             })]
           })]
@@ -9700,20 +9896,20 @@ var Vote = function Vote() {
     });
   };
   var renderItems = function renderItems() {
-    var _pageState$props17, _pageState$props17$it, _pageState$props22, _pageState$props22$it, _pageState$props27, _pageState$props27$it;
+    var _pageState$props16, _pageState$props16$it, _pageState$props21, _pageState$props21$it, _pageState$props26, _pageState$props26$it;
     var children = [];
     var length = 0;
-    if (_utils_Utils__WEBPACK_IMPORTED_MODULE_6__["default"].isId(pageState === null || pageState === void 0 ? void 0 : (_pageState$props17 = pageState.props) === null || _pageState$props17 === void 0 ? void 0 : (_pageState$props17$it = _pageState$props17.item) === null || _pageState$props17$it === void 0 ? void 0 : _pageState$props17$it.voterId1)) {
-      var _pageState$props18, _pageState$props18$it, _pageState$props19, _pageState$props19$it, _pageState$props20, _pageState$props20$it, _pageState$props21, _pageState$props21$it;
-      children.push(renderProxicalVoted(++length, pageState === null || pageState === void 0 ? void 0 : (_pageState$props18 = pageState.props) === null || _pageState$props18 === void 0 ? void 0 : (_pageState$props18$it = _pageState$props18.item) === null || _pageState$props18$it === void 0 ? void 0 : _pageState$props18$it.voterId1, pageState === null || pageState === void 0 ? void 0 : (_pageState$props19 = pageState.props) === null || _pageState$props19 === void 0 ? void 0 : (_pageState$props19$it = _pageState$props19.item) === null || _pageState$props19$it === void 0 ? void 0 : _pageState$props19$it.voter1Name, pageState === null || pageState === void 0 ? void 0 : (_pageState$props20 = pageState.props) === null || _pageState$props20 === void 0 ? void 0 : (_pageState$props20$it = _pageState$props20.item) === null || _pageState$props20$it === void 0 ? void 0 : _pageState$props20$it.voter1Family, pageState === null || pageState === void 0 ? void 0 : (_pageState$props21 = pageState.props) === null || _pageState$props21 === void 0 ? void 0 : (_pageState$props21$it = _pageState$props21.item) === null || _pageState$props21$it === void 0 ? void 0 : _pageState$props21$it.voter1NationalCode));
+    if (_utils_Utils__WEBPACK_IMPORTED_MODULE_6__["default"].isId(pageState === null || pageState === void 0 ? void 0 : (_pageState$props16 = pageState.props) === null || _pageState$props16 === void 0 ? void 0 : (_pageState$props16$it = _pageState$props16.item) === null || _pageState$props16$it === void 0 ? void 0 : _pageState$props16$it.voterId1)) {
+      var _pageState$props17, _pageState$props17$it, _pageState$props18, _pageState$props18$it, _pageState$props19, _pageState$props19$it, _pageState$props20, _pageState$props20$it;
+      children.push(renderProxicalVoted(++length, pageState === null || pageState === void 0 ? void 0 : (_pageState$props17 = pageState.props) === null || _pageState$props17 === void 0 ? void 0 : (_pageState$props17$it = _pageState$props17.item) === null || _pageState$props17$it === void 0 ? void 0 : _pageState$props17$it.voterId1, pageState === null || pageState === void 0 ? void 0 : (_pageState$props18 = pageState.props) === null || _pageState$props18 === void 0 ? void 0 : (_pageState$props18$it = _pageState$props18.item) === null || _pageState$props18$it === void 0 ? void 0 : _pageState$props18$it.voter1Name, pageState === null || pageState === void 0 ? void 0 : (_pageState$props19 = pageState.props) === null || _pageState$props19 === void 0 ? void 0 : (_pageState$props19$it = _pageState$props19.item) === null || _pageState$props19$it === void 0 ? void 0 : _pageState$props19$it.voter1Family, pageState === null || pageState === void 0 ? void 0 : (_pageState$props20 = pageState.props) === null || _pageState$props20 === void 0 ? void 0 : (_pageState$props20$it = _pageState$props20.item) === null || _pageState$props20$it === void 0 ? void 0 : _pageState$props20$it.voter1NationalCode));
     }
-    if (_utils_Utils__WEBPACK_IMPORTED_MODULE_6__["default"].isId(pageState === null || pageState === void 0 ? void 0 : (_pageState$props22 = pageState.props) === null || _pageState$props22 === void 0 ? void 0 : (_pageState$props22$it = _pageState$props22.item) === null || _pageState$props22$it === void 0 ? void 0 : _pageState$props22$it.voterId2)) {
-      var _pageState$props23, _pageState$props23$it, _pageState$props24, _pageState$props24$it, _pageState$props25, _pageState$props25$it, _pageState$props26, _pageState$props26$it;
-      children.push(renderProxicalVoted(++length, pageState === null || pageState === void 0 ? void 0 : (_pageState$props23 = pageState.props) === null || _pageState$props23 === void 0 ? void 0 : (_pageState$props23$it = _pageState$props23.item) === null || _pageState$props23$it === void 0 ? void 0 : _pageState$props23$it.voterId2, pageState === null || pageState === void 0 ? void 0 : (_pageState$props24 = pageState.props) === null || _pageState$props24 === void 0 ? void 0 : (_pageState$props24$it = _pageState$props24.item) === null || _pageState$props24$it === void 0 ? void 0 : _pageState$props24$it.voter2Name, pageState === null || pageState === void 0 ? void 0 : (_pageState$props25 = pageState.props) === null || _pageState$props25 === void 0 ? void 0 : (_pageState$props25$it = _pageState$props25.item) === null || _pageState$props25$it === void 0 ? void 0 : _pageState$props25$it.voter2Family, pageState === null || pageState === void 0 ? void 0 : (_pageState$props26 = pageState.props) === null || _pageState$props26 === void 0 ? void 0 : (_pageState$props26$it = _pageState$props26.item) === null || _pageState$props26$it === void 0 ? void 0 : _pageState$props26$it.voter2NationalCode));
+    if (_utils_Utils__WEBPACK_IMPORTED_MODULE_6__["default"].isId(pageState === null || pageState === void 0 ? void 0 : (_pageState$props21 = pageState.props) === null || _pageState$props21 === void 0 ? void 0 : (_pageState$props21$it = _pageState$props21.item) === null || _pageState$props21$it === void 0 ? void 0 : _pageState$props21$it.voterId2)) {
+      var _pageState$props22, _pageState$props22$it, _pageState$props23, _pageState$props23$it, _pageState$props24, _pageState$props24$it, _pageState$props25, _pageState$props25$it;
+      children.push(renderProxicalVoted(++length, pageState === null || pageState === void 0 ? void 0 : (_pageState$props22 = pageState.props) === null || _pageState$props22 === void 0 ? void 0 : (_pageState$props22$it = _pageState$props22.item) === null || _pageState$props22$it === void 0 ? void 0 : _pageState$props22$it.voterId2, pageState === null || pageState === void 0 ? void 0 : (_pageState$props23 = pageState.props) === null || _pageState$props23 === void 0 ? void 0 : (_pageState$props23$it = _pageState$props23.item) === null || _pageState$props23$it === void 0 ? void 0 : _pageState$props23$it.voter2Name, pageState === null || pageState === void 0 ? void 0 : (_pageState$props24 = pageState.props) === null || _pageState$props24 === void 0 ? void 0 : (_pageState$props24$it = _pageState$props24.item) === null || _pageState$props24$it === void 0 ? void 0 : _pageState$props24$it.voter2Family, pageState === null || pageState === void 0 ? void 0 : (_pageState$props25 = pageState.props) === null || _pageState$props25 === void 0 ? void 0 : (_pageState$props25$it = _pageState$props25.item) === null || _pageState$props25$it === void 0 ? void 0 : _pageState$props25$it.voter2NationalCode));
     }
-    if (_utils_Utils__WEBPACK_IMPORTED_MODULE_6__["default"].isId(pageState === null || pageState === void 0 ? void 0 : (_pageState$props27 = pageState.props) === null || _pageState$props27 === void 0 ? void 0 : (_pageState$props27$it = _pageState$props27.item) === null || _pageState$props27$it === void 0 ? void 0 : _pageState$props27$it.voterId3)) {
-      var _pageState$props28, _pageState$props28$it, _pageState$props29, _pageState$props29$it, _pageState$props30, _pageState$props30$it, _pageState$props31, _pageState$props31$it;
-      children.push(renderProxicalVoted(++length, pageState === null || pageState === void 0 ? void 0 : (_pageState$props28 = pageState.props) === null || _pageState$props28 === void 0 ? void 0 : (_pageState$props28$it = _pageState$props28.item) === null || _pageState$props28$it === void 0 ? void 0 : _pageState$props28$it.voterId3, pageState === null || pageState === void 0 ? void 0 : (_pageState$props29 = pageState.props) === null || _pageState$props29 === void 0 ? void 0 : (_pageState$props29$it = _pageState$props29.item) === null || _pageState$props29$it === void 0 ? void 0 : _pageState$props29$it.voter3Name, pageState === null || pageState === void 0 ? void 0 : (_pageState$props30 = pageState.props) === null || _pageState$props30 === void 0 ? void 0 : (_pageState$props30$it = _pageState$props30.item) === null || _pageState$props30$it === void 0 ? void 0 : _pageState$props30$it.voter3Family, pageState === null || pageState === void 0 ? void 0 : (_pageState$props31 = pageState.props) === null || _pageState$props31 === void 0 ? void 0 : (_pageState$props31$it = _pageState$props31.item) === null || _pageState$props31$it === void 0 ? void 0 : _pageState$props31$it.voter3NationalCode));
+    if (_utils_Utils__WEBPACK_IMPORTED_MODULE_6__["default"].isId(pageState === null || pageState === void 0 ? void 0 : (_pageState$props26 = pageState.props) === null || _pageState$props26 === void 0 ? void 0 : (_pageState$props26$it = _pageState$props26.item) === null || _pageState$props26$it === void 0 ? void 0 : _pageState$props26$it.voterId3)) {
+      var _pageState$props27, _pageState$props27$it, _pageState$props28, _pageState$props28$it, _pageState$props29, _pageState$props29$it, _pageState$props30, _pageState$props30$it;
+      children.push(renderProxicalVoted(++length, pageState === null || pageState === void 0 ? void 0 : (_pageState$props27 = pageState.props) === null || _pageState$props27 === void 0 ? void 0 : (_pageState$props27$it = _pageState$props27.item) === null || _pageState$props27$it === void 0 ? void 0 : _pageState$props27$it.voterId3, pageState === null || pageState === void 0 ? void 0 : (_pageState$props28 = pageState.props) === null || _pageState$props28 === void 0 ? void 0 : (_pageState$props28$it = _pageState$props28.item) === null || _pageState$props28$it === void 0 ? void 0 : _pageState$props28$it.voter3Name, pageState === null || pageState === void 0 ? void 0 : (_pageState$props29 = pageState.props) === null || _pageState$props29 === void 0 ? void 0 : (_pageState$props29$it = _pageState$props29.item) === null || _pageState$props29$it === void 0 ? void 0 : _pageState$props29$it.voter3Family, pageState === null || pageState === void 0 ? void 0 : (_pageState$props30 = pageState.props) === null || _pageState$props30 === void 0 ? void 0 : (_pageState$props30$it = _pageState$props30.item) === null || _pageState$props30$it === void 0 ? void 0 : _pageState$props30$it.voter3NationalCode));
     }
     return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_components__WEBPACK_IMPORTED_MODULE_2__.TableItems, {
       columnsCount: columnsCount,
@@ -9752,7 +9948,7 @@ var Vote = function Vote() {
       hasSubmit: hasSubmit,
       children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_components__WEBPACK_IMPORTED_MODULE_2__.InputHiddenElement, {
         field: "votedType",
-        value: (_pageState$props$item2 = pageState === null || pageState === void 0 ? void 0 : (_pageState$props32 = pageState.props) === null || _pageState$props32 === void 0 ? void 0 : (_pageState$props32$it = _pageState$props32.item) === null || _pageState$props32$it === void 0 ? void 0 : _pageState$props32$it.votedType) !== null && _pageState$props$item2 !== void 0 ? _pageState$props$item2 : _constants__WEBPACK_IMPORTED_MODULE_5__.VOTED_TYPES.NOT_VOTED
+        value: (_pageState$props$item2 = pageState === null || pageState === void 0 ? void 0 : (_pageState$props31 = pageState.props) === null || _pageState$props31 === void 0 ? void 0 : (_pageState$props31$it = _pageState$props31.item) === null || _pageState$props31$it === void 0 ? void 0 : _pageState$props31$it.votedType) !== null && _pageState$props$item2 !== void 0 ? _pageState$props$item2 : _constants__WEBPACK_IMPORTED_MODULE_5__.VOTED_TYPES.NOT_VOTED
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_components__WEBPACK_IMPORTED_MODULE_2__.LabelColumn, {
         field: "name"
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_components__WEBPACK_IMPORTED_MODULE_2__.LabelColumn, {
@@ -9760,28 +9956,30 @@ var Vote = function Vote() {
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_components__WEBPACK_IMPORTED_MODULE_2__.LabelColumn, {
         field: "nationalCode"
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
-        className: "col-md-6 col-12 pb-4",
+        className: "col-12 pb-4",
         children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("span", {
           className: "ml-2",
           children: [_constants_strings__WEBPACK_IMPORTED_MODULE_4__.votePage.votedType, ":"]
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)(_components__WEBPACK_IMPORTED_MODULE_2__.Span, {
           spanStyle: {
-            color: pageState !== null && pageState !== void 0 && (_pageState$props33 = pageState.props) !== null && _pageState$props33 !== void 0 && (_pageState$props33$it = _pageState$props33.item) !== null && _pageState$props33$it !== void 0 && _pageState$props33$it.votedAt ? "green" : "rgb(133 95 4)"
+            color: pageState !== null && pageState !== void 0 && (_pageState$props32 = pageState.props) !== null && _pageState$props32 !== void 0 && (_pageState$props32$it = _pageState$props32.item) !== null && _pageState$props32$it !== void 0 && _pageState$props32$it.votedAt ? "green" : "rgb(133 95 4)"
           },
-          children: [pageState === null || pageState === void 0 ? void 0 : (_pageState$props34 = pageState.props) === null || _pageState$props34 === void 0 ? void 0 : (_pageState$props34$it = _pageState$props34.item) === null || _pageState$props34$it === void 0 ? void 0 : _pageState$props34$it.votedTypeText, " "]
-        }), (pageState === null || pageState === void 0 ? void 0 : (_pageState$props35 = pageState.props) === null || _pageState$props35 === void 0 ? void 0 : (_pageState$props35$it = _pageState$props35.item) === null || _pageState$props35$it === void 0 ? void 0 : _pageState$props35$it.votedType) === _constants__WEBPACK_IMPORTED_MODULE_5__.VOTED_TYPES.PROXICAL && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_components__WEBPACK_IMPORTED_MODULE_2__.CustomLink, {
+          children: [pageState === null || pageState === void 0 ? void 0 : (_pageState$props33 = pageState.props) === null || _pageState$props33 === void 0 ? void 0 : (_pageState$props33$it = _pageState$props33.item) === null || _pageState$props33$it === void 0 ? void 0 : _pageState$props33$it.votedTypeText, " "]
+        }), (pageState === null || pageState === void 0 ? void 0 : (_pageState$props34 = pageState.props) === null || _pageState$props34 === void 0 ? void 0 : (_pageState$props34$it = _pageState$props34.item) === null || _pageState$props34$it === void 0 ? void 0 : _pageState$props34$it.votedType) === _constants__WEBPACK_IMPORTED_MODULE_5__.VOTED_TYPES.PROXICAL && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_components__WEBPACK_IMPORTED_MODULE_2__.CustomLink, {
           onClick: function onClick() {
-            var _pageState$props36, _pageState$props36$it, _pageState$props36$it2;
-            return pageUtils.onView(pageState === null || pageState === void 0 ? void 0 : (_pageState$props36 = pageState.props) === null || _pageState$props36 === void 0 ? void 0 : (_pageState$props36$it = _pageState$props36.item) === null || _pageState$props36$it === void 0 ? void 0 : (_pageState$props36$it2 = _pageState$props36$it.voter) === null || _pageState$props36$it2 === void 0 ? void 0 : _pageState$props36$it2.id);
+            var _pageState$props35, _pageState$props35$it, _pageState$props35$it2;
+            return pageUtils.onView(pageState === null || pageState === void 0 ? void 0 : (_pageState$props35 = pageState.props) === null || _pageState$props35 === void 0 ? void 0 : (_pageState$props35$it = _pageState$props35.item) === null || _pageState$props35$it === void 0 ? void 0 : (_pageState$props35$it2 = _pageState$props35$it.voter) === null || _pageState$props35$it2 === void 0 ? void 0 : _pageState$props35$it2.id);
           },
           children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_components__WEBPACK_IMPORTED_MODULE_2__.Span, {
-            children: "".concat(pageState === null || pageState === void 0 ? void 0 : (_pageState$props37 = pageState.props) === null || _pageState$props37 === void 0 ? void 0 : (_pageState$props37$it = _pageState$props37.item) === null || _pageState$props37$it === void 0 ? void 0 : (_pageState$props37$it2 = _pageState$props37$it.voter) === null || _pageState$props37$it2 === void 0 ? void 0 : _pageState$props37$it2.name, " ").concat(pageState === null || pageState === void 0 ? void 0 : (_pageState$props38 = pageState.props) === null || _pageState$props38 === void 0 ? void 0 : (_pageState$props38$it = _pageState$props38.item) === null || _pageState$props38$it === void 0 ? void 0 : (_pageState$props38$it2 = _pageState$props38$it.voter) === null || _pageState$props38$it2 === void 0 ? void 0 : _pageState$props38$it2.family, " - ").concat(pageState === null || pageState === void 0 ? void 0 : (_pageState$props39 = pageState.props) === null || _pageState$props39 === void 0 ? void 0 : (_pageState$props39$it = _pageState$props39.item) === null || _pageState$props39$it === void 0 ? void 0 : (_pageState$props39$it2 = _pageState$props39$it.voter) === null || _pageState$props39$it2 === void 0 ? void 0 : _pageState$props39$it2.nationalCode)
+            children: "".concat(pageState === null || pageState === void 0 ? void 0 : (_pageState$props36 = pageState.props) === null || _pageState$props36 === void 0 ? void 0 : (_pageState$props36$it = _pageState$props36.item) === null || _pageState$props36$it === void 0 ? void 0 : (_pageState$props36$it2 = _pageState$props36$it.voter) === null || _pageState$props36$it2 === void 0 ? void 0 : _pageState$props36$it2.name, " ").concat(pageState === null || pageState === void 0 ? void 0 : (_pageState$props37 = pageState.props) === null || _pageState$props37 === void 0 ? void 0 : (_pageState$props37$it = _pageState$props37.item) === null || _pageState$props37$it === void 0 ? void 0 : (_pageState$props37$it2 = _pageState$props37$it.voter) === null || _pageState$props37$it2 === void 0 ? void 0 : _pageState$props37$it2.family, " - ").concat(pageState === null || pageState === void 0 ? void 0 : (_pageState$props38 = pageState.props) === null || _pageState$props38 === void 0 ? void 0 : (_pageState$props38$it = _pageState$props38.item) === null || _pageState$props38$it === void 0 ? void 0 : (_pageState$props38$it2 = _pageState$props38$it.voter) === null || _pageState$props38$it2 === void 0 ? void 0 : _pageState$props38$it2.nationalCode)
           })
-        }), (pageState === null || pageState === void 0 ? void 0 : (_pageState$props40 = pageState.props) === null || _pageState$props40 === void 0 ? void 0 : (_pageState$props40$it = _pageState$props40.item) === null || _pageState$props40$it === void 0 ? void 0 : _pageState$props40$it.votedType) === _constants__WEBPACK_IMPORTED_MODULE_5__.VOTED_TYPES.NOT_SHAREHOLDER && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_components__WEBPACK_IMPORTED_MODULE_2__.Span, {
-          children: "".concat(pageState === null || pageState === void 0 ? void 0 : (_pageState$props41 = pageState.props) === null || _pageState$props41 === void 0 ? void 0 : (_pageState$props41$it = _pageState$props41.item) === null || _pageState$props41$it === void 0 ? void 0 : _pageState$props41$it.notShareholderName, " ").concat(pageState === null || pageState === void 0 ? void 0 : (_pageState$props42 = pageState.props) === null || _pageState$props42 === void 0 ? void 0 : (_pageState$props42$it = _pageState$props42.item) === null || _pageState$props42$it === void 0 ? void 0 : _pageState$props42$it.notShareholderFamily, " - ").concat(pageState === null || pageState === void 0 ? void 0 : (_pageState$props43 = pageState.props) === null || _pageState$props43 === void 0 ? void 0 : (_pageState$props43$it = _pageState$props43.item) === null || _pageState$props43$it === void 0 ? void 0 : _pageState$props43$it.notShareholderNationalCode)
+        }), (pageState === null || pageState === void 0 ? void 0 : (_pageState$props39 = pageState.props) === null || _pageState$props39 === void 0 ? void 0 : (_pageState$props39$it = _pageState$props39.item) === null || _pageState$props39$it === void 0 ? void 0 : _pageState$props39$it.votedType) === _constants__WEBPACK_IMPORTED_MODULE_5__.VOTED_TYPES.NOT_SHAREHOLDER && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_components__WEBPACK_IMPORTED_MODULE_2__.Span, {
+          children: "".concat(pageState === null || pageState === void 0 ? void 0 : (_pageState$props40 = pageState.props) === null || _pageState$props40 === void 0 ? void 0 : (_pageState$props40$it = _pageState$props40.item) === null || _pageState$props40$it === void 0 ? void 0 : _pageState$props40$it.notShareholderName, " ").concat(pageState === null || pageState === void 0 ? void 0 : (_pageState$props41 = pageState.props) === null || _pageState$props41 === void 0 ? void 0 : (_pageState$props41$it = _pageState$props41.item) === null || _pageState$props41$it === void 0 ? void 0 : _pageState$props41$it.notShareholderFamily, " - ").concat(pageState === null || pageState === void 0 ? void 0 : (_pageState$props42 = pageState.props) === null || _pageState$props42 === void 0 ? void 0 : (_pageState$props42$it = _pageState$props42.item) === null || _pageState$props42$it === void 0 ? void 0 : _pageState$props42$it.notShareholderNationalCode)
+        }), (pageState === null || pageState === void 0 ? void 0 : (_pageState$props43 = pageState.props) === null || _pageState$props43 === void 0 ? void 0 : (_pageState$props43$it = _pageState$props43.item) === null || _pageState$props43$it === void 0 ? void 0 : _pageState$props43$it.votedAt) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)(_components__WEBPACK_IMPORTED_MODULE_2__.Span, {
+          children: [pageState === null || pageState === void 0 ? void 0 : (_pageState$props44 = pageState.props) === null || _pageState$props44 === void 0 ? void 0 : (_pageState$props44$it = _pageState$props44.item) === null || _pageState$props44$it === void 0 ? void 0 : _pageState$props44$it.votedAtFa, " - [", " ", pageState === null || pageState === void 0 ? void 0 : (_pageState$props45 = pageState.props) === null || _pageState$props45 === void 0 ? void 0 : (_pageState$props45$it = _pageState$props45.item) === null || _pageState$props45$it === void 0 ? void 0 : _pageState$props45$it.username, " ]"]
         })]
-      }), renderVoterInfo(), renderVoter(), renderProxicalVoter(), renderNotShareholderVoter()]
-    }), renderShareholder(), (pageState === null || pageState === void 0 ? void 0 : (_pageState$props44 = pageState.props) === null || _pageState$props44 === void 0 ? void 0 : (_pageState$props44$it = _pageState$props44.item) === null || _pageState$props44$it === void 0 ? void 0 : _pageState$props44$it.votedAt) && (pageState === null || pageState === void 0 ? void 0 : (_pageState$props45 = pageState.props) === null || _pageState$props45 === void 0 ? void 0 : (_pageState$props45$it = _pageState$props45.item) === null || _pageState$props45$it === void 0 ? void 0 : _pageState$props45$it.votedType) === _constants__WEBPACK_IMPORTED_MODULE_5__.VOTED_TYPES.PERSONAL && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.Fragment, {
+      }), renderVoter(), renderProxicalVoter(), renderNotShareholderVoter()]
+    }), renderVoteProxical(), (pageState === null || pageState === void 0 ? void 0 : (_pageState$props46 = pageState.props) === null || _pageState$props46 === void 0 ? void 0 : (_pageState$props46$it = _pageState$props46.item) === null || _pageState$props46$it === void 0 ? void 0 : _pageState$props46$it.votedAt) && (pageState === null || pageState === void 0 ? void 0 : (_pageState$props47 = pageState.props) === null || _pageState$props47 === void 0 ? void 0 : (_pageState$props47$it = _pageState$props47.item) === null || _pageState$props47$it === void 0 ? void 0 : _pageState$props47$it.votedType) === _constants__WEBPACK_IMPORTED_MODULE_5__.VOTED_TYPES.PERSONAL && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.Fragment, {
       children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("h6", {
         children: _constants_strings__WEBPACK_IMPORTED_MODULE_4__.votePage.proxicalVoted
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_components__WEBPACK_IMPORTED_MODULE_2__.TableCard, {
@@ -10924,11 +11122,15 @@ var InputHiddenElement = function InputHiddenElement(_ref) {
       setForm(pageState === null || pageState === void 0 ? void 0 : (_pageState$pageUtils = pageState.pageUtils) === null || _pageState$pageUtils === void 0 ? void 0 : _pageState$pageUtils.useForm);
     }
   }, [pageState]);
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
+    if (form) {
+      form.setValue(field, value);
+    }
+  }, [value]);
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("input", _objectSpread(_objectSpread({
     id: field
   }, form === null || form === void 0 ? void 0 : form.register("".concat(field))), {}, {
-    type: "hidden",
-    value: value
+    type: "hidden"
   }));
 };
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (InputHiddenElement);
@@ -11776,8 +11978,8 @@ var BasePageLayout = function BasePageLayout(_ref) {
     dispatch((0,_state_page_pageActions__WEBPACK_IMPORTED_MODULE_5__.setPageTitleAction)(pageUtils.strings._title, pageUtils.strings._subTitle));
     dispatch((0,_state_page_pageActions__WEBPACK_IMPORTED_MODULE_5__.setPageParamsAction)(params));
     dispatch((0,_state_page_pageActions__WEBPACK_IMPORTED_MODULE_5__.setNavigateAction)(navigate));
-    dispatch((0,_state_page_pageActions__WEBPACK_IMPORTED_MODULE_5__.setPageUtilsAction)(pageUtils));
     dispatch((0,_state_page_pageActions__WEBPACK_IMPORTED_MODULE_5__.setDispatchAction)(dispatch));
+    dispatch((0,_state_page_pageActions__WEBPACK_IMPORTED_MODULE_5__.setPageUtilsAction)(pageUtils));
     loadModals();
   }, []);
   var loadModals = function loadModals() {
@@ -12463,6 +12665,8 @@ var FormCard = function FormCard(_ref) {
     hasSubmit = _ref$hasSubmit === void 0 ? true : _ref$hasSubmit,
     _ref$submitEnabled = _ref.submitEnabled,
     submitEnabled = _ref$submitEnabled === void 0 ? true : _ref$submitEnabled,
+    _ref$onSubmit = _ref.onSubmit,
+    onSubmit = _ref$onSubmit === void 0 ? null : _ref$onSubmit,
     _ref$hasCancel = _ref.hasCancel,
     hasCancel = _ref$hasCancel === void 0 ? true : _ref$hasCancel;
   var layoutState = (0,react_redux__WEBPACK_IMPORTED_MODULE_1__.useSelector)(function (state) {
@@ -12490,14 +12694,14 @@ var FormCard = function FormCard(_ref) {
                 className: "btn btn-success px-4 ml-2",
                 type: "button",
                 title: pageUtils !== null && pageUtils !== void 0 && pageUtils.strings && "submit" in pageUtils.strings ? pageUtils.strings["submit"] : _constants_strings__WEBPACK_IMPORTED_MODULE_2__.general.submit,
-                onClick: pageUtils.useForm.handleSubmit(pageUtils.onSubmit),
+                onClick: pageUtils === null || pageUtils === void 0 ? void 0 : pageUtils.useForm.handleSubmit(onSubmit !== null && onSubmit !== void 0 ? onSubmit : pageUtils.onSubmit),
                 disabled: (layoutState === null || layoutState === void 0 ? void 0 : layoutState.loading) || !submitEnabled,
                 children: pageUtils !== null && pageUtils !== void 0 && pageUtils.strings && "submit" in pageUtils.strings ? pageUtils.strings["submit"] : _constants_strings__WEBPACK_IMPORTED_MODULE_2__.general.submit
               }), hasCancel && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("button", {
                 className: "btn btn-secondary px-4",
                 type: "button",
                 title: pageUtils !== null && pageUtils !== void 0 && pageUtils.strings && "cancel" in pageUtils.strings ? pageUtils.strings["cancel"] : _constants_strings__WEBPACK_IMPORTED_MODULE_2__.general.cancel,
-                onClick: pageUtils.onCancel,
+                onClick: pageUtils === null || pageUtils === void 0 ? void 0 : pageUtils.onCancel,
                 disabled: layoutState === null || layoutState === void 0 ? void 0 : layoutState.loading,
                 children: pageUtils !== null && pageUtils !== void 0 && pageUtils.strings && "cancel" in pageUtils.strings ? pageUtils.strings["cancel"] : _constants_strings__WEBPACK_IMPORTED_MODULE_2__.general.cancel
               })]
@@ -13698,7 +13902,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _constants_strings__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../constants/strings */ "./resources/js/constants/strings.js");
 
 var validate = function validate(schema, field) {
-  return schema.min(2, _constants_strings__WEBPACK_IMPORTED_MODULE_0__.validation.minMessage.replace(":field", field).replace(":min", "2")).max(50, _constants_strings__WEBPACK_IMPORTED_MODULE_0__.validation.maxMessage.replace(":field", field).replace(":max", "50")).matches(/^[a-z]+$/, _constants_strings__WEBPACK_IMPORTED_MODULE_0__.validation.stringMessage.replace(":field", field));
+  return schema.min(2, _constants_strings__WEBPACK_IMPORTED_MODULE_0__.validation.minMessage.replace(":field", field).replace(":min", "2")).max(50, _constants_strings__WEBPACK_IMPORTED_MODULE_0__.validation.maxMessage.replace(":field", field).replace(":max", "50")).matches(/^[a-zA-Z ]+$/, _constants_strings__WEBPACK_IMPORTED_MODULE_0__.validation.stringMessage.replace(":field", field));
 };
 var nameValidator = function nameValidator(schema, field) {
   var required = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : true;
@@ -13897,6 +14101,12 @@ __webpack_require__.r(__webpack_exports__);
 
 
 var voteVoterSchema = yup__WEBPACK_IMPORTED_MODULE_0__.object().shape({
+  shareholderNationalCode: yup__WEBPACK_IMPORTED_MODULE_0__.string().when("votedType", function (votedType, schema) {
+    if (votedType == _constants__WEBPACK_IMPORTED_MODULE_1__.VOTED_TYPES.PERSONAL) {
+      return (0,_CommonValidators__WEBPACK_IMPORTED_MODULE_3__.nationalCodeValidator)(schema, _constants_strings__WEBPACK_IMPORTED_MODULE_2__.votePage.shareholderNationalCode);
+    }
+    return schema;
+  }),
   proxicalVoterNationalCode: yup__WEBPACK_IMPORTED_MODULE_0__.string().when("voter", function (voter, schema) {
     if (voter == _constants__WEBPACK_IMPORTED_MODULE_1__.VOTED_TYPES.PROXICAL) {
       return (0,_CommonValidators__WEBPACK_IMPORTED_MODULE_3__.nationalCodeValidator)(schema, _constants_strings__WEBPACK_IMPORTED_MODULE_2__.votePage.proxicalVoterNationalCode);
@@ -14366,6 +14576,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "SET_NAVIGATE_ACTION": () => (/* binding */ SET_NAVIGATE_ACTION),
 /* harmony export */   "SET_PAGE_ACTION": () => (/* binding */ SET_PAGE_ACTION),
 /* harmony export */   "SET_PAGE_UTILS_ACTION": () => (/* binding */ SET_PAGE_UTILS_ACTION),
+/* harmony export */   "SET_PAGE_UTILS_LOADED_ACTION": () => (/* binding */ SET_PAGE_UTILS_LOADED_ACTION),
 /* harmony export */   "SET_PARAMS_ACTION": () => (/* binding */ SET_PARAMS_ACTION),
 /* harmony export */   "SET_PROPS_ACTION": () => (/* binding */ SET_PROPS_ACTION),
 /* harmony export */   "SET_TITLE_ACTION": () => (/* binding */ SET_TITLE_ACTION),
@@ -14376,7 +14587,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "setPageParamsAction": () => (/* binding */ setPageParamsAction),
 /* harmony export */   "setPagePropsAction": () => (/* binding */ setPagePropsAction),
 /* harmony export */   "setPageTitleAction": () => (/* binding */ setPageTitleAction),
-/* harmony export */   "setPageUtilsAction": () => (/* binding */ setPageUtilsAction)
+/* harmony export */   "setPageUtilsAction": () => (/* binding */ setPageUtilsAction),
+/* harmony export */   "setPageUtilsLoadedAction": () => (/* binding */ setPageUtilsLoadedAction)
 /* harmony export */ });
 function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
 function _regeneratorRuntime() { "use strict"; /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/facebook/regenerator/blob/main/LICENSE */ _regeneratorRuntime = function _regeneratorRuntime() { return exports; }; var exports = {}, Op = Object.prototype, hasOwn = Op.hasOwnProperty, defineProperty = Object.defineProperty || function (obj, key, desc) { obj[key] = desc.value; }, $Symbol = "function" == typeof Symbol ? Symbol : {}, iteratorSymbol = $Symbol.iterator || "@@iterator", asyncIteratorSymbol = $Symbol.asyncIterator || "@@asyncIterator", toStringTagSymbol = $Symbol.toStringTag || "@@toStringTag"; function define(obj, key, value) { return Object.defineProperty(obj, key, { value: value, enumerable: !0, configurable: !0, writable: !0 }), obj[key]; } try { define({}, ""); } catch (err) { define = function define(obj, key, value) { return obj[key] = value; }; } function wrap(innerFn, outerFn, self, tryLocsList) { var protoGenerator = outerFn && outerFn.prototype instanceof Generator ? outerFn : Generator, generator = Object.create(protoGenerator.prototype), context = new Context(tryLocsList || []); return defineProperty(generator, "_invoke", { value: makeInvokeMethod(innerFn, self, context) }), generator; } function tryCatch(fn, obj, arg) { try { return { type: "normal", arg: fn.call(obj, arg) }; } catch (err) { return { type: "throw", arg: err }; } } exports.wrap = wrap; var ContinueSentinel = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} var IteratorPrototype = {}; define(IteratorPrototype, iteratorSymbol, function () { return this; }); var getProto = Object.getPrototypeOf, NativeIteratorPrototype = getProto && getProto(getProto(values([]))); NativeIteratorPrototype && NativeIteratorPrototype !== Op && hasOwn.call(NativeIteratorPrototype, iteratorSymbol) && (IteratorPrototype = NativeIteratorPrototype); var Gp = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(IteratorPrototype); function defineIteratorMethods(prototype) { ["next", "throw", "return"].forEach(function (method) { define(prototype, method, function (arg) { return this._invoke(method, arg); }); }); } function AsyncIterator(generator, PromiseImpl) { function invoke(method, arg, resolve, reject) { var record = tryCatch(generator[method], generator, arg); if ("throw" !== record.type) { var result = record.arg, value = result.value; return value && "object" == _typeof(value) && hasOwn.call(value, "__await") ? PromiseImpl.resolve(value.__await).then(function (value) { invoke("next", value, resolve, reject); }, function (err) { invoke("throw", err, resolve, reject); }) : PromiseImpl.resolve(value).then(function (unwrapped) { result.value = unwrapped, resolve(result); }, function (error) { return invoke("throw", error, resolve, reject); }); } reject(record.arg); } var previousPromise; defineProperty(this, "_invoke", { value: function value(method, arg) { function callInvokeWithMethodAndArg() { return new PromiseImpl(function (resolve, reject) { invoke(method, arg, resolve, reject); }); } return previousPromise = previousPromise ? previousPromise.then(callInvokeWithMethodAndArg, callInvokeWithMethodAndArg) : callInvokeWithMethodAndArg(); } }); } function makeInvokeMethod(innerFn, self, context) { var state = "suspendedStart"; return function (method, arg) { if ("executing" === state) throw new Error("Generator is already running"); if ("completed" === state) { if ("throw" === method) throw arg; return doneResult(); } for (context.method = method, context.arg = arg;;) { var delegate = context.delegate; if (delegate) { var delegateResult = maybeInvokeDelegate(delegate, context); if (delegateResult) { if (delegateResult === ContinueSentinel) continue; return delegateResult; } } if ("next" === context.method) context.sent = context._sent = context.arg;else if ("throw" === context.method) { if ("suspendedStart" === state) throw state = "completed", context.arg; context.dispatchException(context.arg); } else "return" === context.method && context.abrupt("return", context.arg); state = "executing"; var record = tryCatch(innerFn, self, context); if ("normal" === record.type) { if (state = context.done ? "completed" : "suspendedYield", record.arg === ContinueSentinel) continue; return { value: record.arg, done: context.done }; } "throw" === record.type && (state = "completed", context.method = "throw", context.arg = record.arg); } }; } function maybeInvokeDelegate(delegate, context) { var methodName = context.method, method = delegate.iterator[methodName]; if (undefined === method) return context.delegate = null, "throw" === methodName && delegate.iterator["return"] && (context.method = "return", context.arg = undefined, maybeInvokeDelegate(delegate, context), "throw" === context.method) || "return" !== methodName && (context.method = "throw", context.arg = new TypeError("The iterator does not provide a '" + methodName + "' method")), ContinueSentinel; var record = tryCatch(method, delegate.iterator, context.arg); if ("throw" === record.type) return context.method = "throw", context.arg = record.arg, context.delegate = null, ContinueSentinel; var info = record.arg; return info ? info.done ? (context[delegate.resultName] = info.value, context.next = delegate.nextLoc, "return" !== context.method && (context.method = "next", context.arg = undefined), context.delegate = null, ContinueSentinel) : info : (context.method = "throw", context.arg = new TypeError("iterator result is not an object"), context.delegate = null, ContinueSentinel); } function pushTryEntry(locs) { var entry = { tryLoc: locs[0] }; 1 in locs && (entry.catchLoc = locs[1]), 2 in locs && (entry.finallyLoc = locs[2], entry.afterLoc = locs[3]), this.tryEntries.push(entry); } function resetTryEntry(entry) { var record = entry.completion || {}; record.type = "normal", delete record.arg, entry.completion = record; } function Context(tryLocsList) { this.tryEntries = [{ tryLoc: "root" }], tryLocsList.forEach(pushTryEntry, this), this.reset(!0); } function values(iterable) { if (iterable) { var iteratorMethod = iterable[iteratorSymbol]; if (iteratorMethod) return iteratorMethod.call(iterable); if ("function" == typeof iterable.next) return iterable; if (!isNaN(iterable.length)) { var i = -1, next = function next() { for (; ++i < iterable.length;) if (hasOwn.call(iterable, i)) return next.value = iterable[i], next.done = !1, next; return next.value = undefined, next.done = !0, next; }; return next.next = next; } } return { next: doneResult }; } function doneResult() { return { value: undefined, done: !0 }; } return GeneratorFunction.prototype = GeneratorFunctionPrototype, defineProperty(Gp, "constructor", { value: GeneratorFunctionPrototype, configurable: !0 }), defineProperty(GeneratorFunctionPrototype, "constructor", { value: GeneratorFunction, configurable: !0 }), GeneratorFunction.displayName = define(GeneratorFunctionPrototype, toStringTagSymbol, "GeneratorFunction"), exports.isGeneratorFunction = function (genFun) { var ctor = "function" == typeof genFun && genFun.constructor; return !!ctor && (ctor === GeneratorFunction || "GeneratorFunction" === (ctor.displayName || ctor.name)); }, exports.mark = function (genFun) { return Object.setPrototypeOf ? Object.setPrototypeOf(genFun, GeneratorFunctionPrototype) : (genFun.__proto__ = GeneratorFunctionPrototype, define(genFun, toStringTagSymbol, "GeneratorFunction")), genFun.prototype = Object.create(Gp), genFun; }, exports.awrap = function (arg) { return { __await: arg }; }, defineIteratorMethods(AsyncIterator.prototype), define(AsyncIterator.prototype, asyncIteratorSymbol, function () { return this; }), exports.AsyncIterator = AsyncIterator, exports.async = function (innerFn, outerFn, self, tryLocsList, PromiseImpl) { void 0 === PromiseImpl && (PromiseImpl = Promise); var iter = new AsyncIterator(wrap(innerFn, outerFn, self, tryLocsList), PromiseImpl); return exports.isGeneratorFunction(outerFn) ? iter : iter.next().then(function (result) { return result.done ? result.value : iter.next(); }); }, defineIteratorMethods(Gp), define(Gp, toStringTagSymbol, "Generator"), define(Gp, iteratorSymbol, function () { return this; }), define(Gp, "toString", function () { return "[object Generator]"; }), exports.keys = function (val) { var object = Object(val), keys = []; for (var key in object) keys.push(key); return keys.reverse(), function next() { for (; keys.length;) { var key = keys.pop(); if (key in object) return next.value = key, next.done = !1, next; } return next.done = !0, next; }; }, exports.values = values, Context.prototype = { constructor: Context, reset: function reset(skipTempReset) { if (this.prev = 0, this.next = 0, this.sent = this._sent = undefined, this.done = !1, this.delegate = null, this.method = "next", this.arg = undefined, this.tryEntries.forEach(resetTryEntry), !skipTempReset) for (var name in this) "t" === name.charAt(0) && hasOwn.call(this, name) && !isNaN(+name.slice(1)) && (this[name] = undefined); }, stop: function stop() { this.done = !0; var rootRecord = this.tryEntries[0].completion; if ("throw" === rootRecord.type) throw rootRecord.arg; return this.rval; }, dispatchException: function dispatchException(exception) { if (this.done) throw exception; var context = this; function handle(loc, caught) { return record.type = "throw", record.arg = exception, context.next = loc, caught && (context.method = "next", context.arg = undefined), !!caught; } for (var i = this.tryEntries.length - 1; i >= 0; --i) { var entry = this.tryEntries[i], record = entry.completion; if ("root" === entry.tryLoc) return handle("end"); if (entry.tryLoc <= this.prev) { var hasCatch = hasOwn.call(entry, "catchLoc"), hasFinally = hasOwn.call(entry, "finallyLoc"); if (hasCatch && hasFinally) { if (this.prev < entry.catchLoc) return handle(entry.catchLoc, !0); if (this.prev < entry.finallyLoc) return handle(entry.finallyLoc); } else if (hasCatch) { if (this.prev < entry.catchLoc) return handle(entry.catchLoc, !0); } else { if (!hasFinally) throw new Error("try statement without catch or finally"); if (this.prev < entry.finallyLoc) return handle(entry.finallyLoc); } } } }, abrupt: function abrupt(type, arg) { for (var i = this.tryEntries.length - 1; i >= 0; --i) { var entry = this.tryEntries[i]; if (entry.tryLoc <= this.prev && hasOwn.call(entry, "finallyLoc") && this.prev < entry.finallyLoc) { var finallyEntry = entry; break; } } finallyEntry && ("break" === type || "continue" === type) && finallyEntry.tryLoc <= arg && arg <= finallyEntry.finallyLoc && (finallyEntry = null); var record = finallyEntry ? finallyEntry.completion : {}; return record.type = type, record.arg = arg, finallyEntry ? (this.method = "next", this.next = finallyEntry.finallyLoc, ContinueSentinel) : this.complete(record); }, complete: function complete(record, afterLoc) { if ("throw" === record.type) throw record.arg; return "break" === record.type || "continue" === record.type ? this.next = record.arg : "return" === record.type ? (this.rval = this.arg = record.arg, this.method = "return", this.next = "end") : "normal" === record.type && afterLoc && (this.next = afterLoc), ContinueSentinel; }, finish: function finish(finallyLoc) { for (var i = this.tryEntries.length - 1; i >= 0; --i) { var entry = this.tryEntries[i]; if (entry.finallyLoc === finallyLoc) return this.complete(entry.completion, entry.afterLoc), resetTryEntry(entry), ContinueSentinel; } }, "catch": function _catch(tryLoc) { for (var i = this.tryEntries.length - 1; i >= 0; --i) { var entry = this.tryEntries[i]; if (entry.tryLoc === tryLoc) { var record = entry.completion; if ("throw" === record.type) { var thrown = record.arg; resetTryEntry(entry); } return thrown; } } throw new Error("illegal catch attempt"); }, delegateYield: function delegateYield(iterable, resultName, nextLoc) { return this.delegate = { iterator: values(iterable), resultName: resultName, nextLoc: nextLoc }, "next" === this.method && (this.arg = undefined), ContinueSentinel; } }, exports; }
@@ -14390,6 +14602,7 @@ var SET_NAVIGATE_ACTION = "SET_NAVIGATE_ACTION";
 var SET_TITLE_ACTION = "SET_TITLE_ACTION";
 var SET_ICON_ACTION = "SET_ICON_ACTION";
 var SET_PAGE_UTILS_ACTION = "SET_PAGE_UTILS_ACTION";
+var SET_PAGE_UTILS_LOADED_ACTION = "SET_PAGE_UTILS_LOADED_ACTION";
 var setPageAction = function setPageAction(page) {
   return /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(dispatch) {
@@ -14561,6 +14774,26 @@ var setPageUtilsAction = function setPageUtilsAction(pageUtils) {
     };
   }();
 };
+var setPageUtilsLoadedAction = function setPageUtilsLoadedAction() {
+  return /*#__PURE__*/function () {
+    var _ref9 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee9(dispatch) {
+      return _regeneratorRuntime().wrap(function _callee9$(_context9) {
+        while (1) switch (_context9.prev = _context9.next) {
+          case 0:
+            dispatch({
+              type: SET_PAGE_UTILS_LOADED_ACTION
+            });
+          case 1:
+          case "end":
+            return _context9.stop();
+        }
+      }, _callee9);
+    }));
+    return function (_x9) {
+      return _ref9.apply(this, arguments);
+    };
+  }();
+};
 
 /***/ }),
 
@@ -14592,7 +14825,8 @@ var initialState = {
   title: "",
   subTitle: "",
   icon: null,
-  pageUtils: null
+  pageUtils: null,
+  pageUtilsLoaded: false
 };
 var pageReducer = function pageReducer() {
   var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : initialState;
@@ -14632,6 +14866,10 @@ var pageReducer = function pageReducer() {
     case _pageActions__WEBPACK_IMPORTED_MODULE_0__.SET_PAGE_UTILS_ACTION:
       return _objectSpread(_objectSpread({}, state), {}, {
         pageUtils: payload
+      });
+    case _pageActions__WEBPACK_IMPORTED_MODULE_0__.SET_PAGE_UTILS_LOADED_ACTION:
+      return _objectSpread(_objectSpread({}, state), {}, {
+        pageUtilsLoaded: true
       });
     default:
       return state;
@@ -14985,6 +15223,7 @@ var BasePageUtils = /*#__PURE__*/function () {
     key: "onLoad",
     value: function onLoad() {
       this.dispatch((0,_state_page_pageActions__WEBPACK_IMPORTED_MODULE_5__.setPagePropsAction)(this.initialPageProps));
+      this.dispatch((0,_state_page_pageActions__WEBPACK_IMPORTED_MODULE_5__.setPageUtilsLoadedAction)());
     }
   }, {
     key: "onSendRequest",

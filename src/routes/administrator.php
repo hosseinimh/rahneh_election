@@ -29,4 +29,5 @@ Route::middleware(['auth:sanctum', 'auth.administrator'])->group(function () {
     Route::post('voters/personal_vote/{model}', [VoterController::class, 'personalVote']);
     Route::post('voters/proxical_vote/{model}', [VoterController::class, 'proxicalVote']);
     Route::post('voters/not_shareholder_vote/{model}', [VoterController::class, 'notShareholderVote']);
+    Route::post('voters/vote_shareholder/{model}', [VoterController::class, 'voteForShareholder']);
 });

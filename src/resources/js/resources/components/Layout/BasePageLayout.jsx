@@ -112,8 +112,8 @@ const BasePageLayout = ({ pageUtils, children, authPage = true, modals }) => {
         );
         dispatch(setPageParamsAction(params));
         dispatch(setNavigateAction(navigate));
-        dispatch(setPageUtilsAction(pageUtils));
         dispatch(setDispatchAction(dispatch));
+        dispatch(setPageUtilsAction(pageUtils));
 
         loadModals();
     }, []);

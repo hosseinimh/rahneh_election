@@ -19,9 +19,8 @@ import {
     votePage as strings,
     voteTypes,
 } from "../../../../constants/strings";
-import { BASE_PATH, VOTED_TYPES } from "../../../../constants";
+import { VOTED_TYPES } from "../../../../constants";
 import utils from "../../../../utils/Utils";
-import { Link } from "react-router-dom";
 
 const voteTyeItems = [
     { id: VOTED_TYPES.PERSONAL, value: voteTypes.personal },
@@ -61,59 +60,94 @@ const Vote = () => {
         return <></>;
     };
 
-    const renderVoterInfo = () => {
-        if (pageState?.props?.item && pageState?.props?.item?.votedAt) {
-            return (
-                <div className={"col-md-6 col-12 pb-4"}>
-                    <Span>
-                        {pageState.props.item.votedAtFa} - [{" "}
-                        {pageState.props.item.username} ]
-                    </Span>
-                </div>
-            );
-        }
-
-        return <></>;
-    };
-
     const renderProxicalVoter = () => {
         if (
             !pageState?.props?.item?.votedAt &&
             pageState?.props?.voteType === VOTED_TYPES.PROXICAL
         ) {
             return (
-                <div
-                    className="col-12"
-                    style={{
-                        borderTop: "1px solid rgba(26, 54, 126, 0.125)",
-                    }}
-                >
-                    <div className="row pt-4">
-                        <InputTextColumn
-                            field={"proxicalVoterNationalCode"}
-                            inputStyle={{
-                                textAlign: "left",
-                                direction: "ltr",
-                            }}
-                        />
-                        <div
-                            className="col pr-0 d-flex align-items-center"
-                            style={{ marginBottom: "10px" }}
-                        >
-                            <button
-                                className="btn btn-warning px-4 ml-2"
-                                type="button"
-                                title={general.search}
-                                onClick={pageUtils.useForm.handleSubmit(
-                                    pageUtils.onSearch
-                                )}
-                                disabled={layoutState?.loading}
+                <>
+                    <div
+                        className="col-12"
+                        style={{
+                            borderTop: "1px solid rgba(26, 54, 126, 0.125)",
+                        }}
+                    >
+                        <div className="row pt-4">
+                            <InputTextColumn
+                                field={"proxicalVoterNationalCode"}
+                                inputStyle={{
+                                    textAlign: "left",
+                                    direction: "ltr",
+                                }}
+                            />
+                            <div
+                                className="col pr-0 d-flex align-items-center"
+                                style={{ marginBottom: "10px" }}
                             >
-                                {general.search}
-                            </button>
+                                <button
+                                    className="btn btn-warning px-4 ml-2"
+                                    type="button"
+                                    title={general.search}
+                                    onClick={pageUtils.useForm.handleSubmit(
+                                        pageUtils.onSearchProxy
+                                    )}
+                                    disabled={layoutState?.loading}
+                                >
+                                    {general.search}
+                                </button>
+                            </div>
                         </div>
                     </div>
-                </div>
+                    {pageState?.props?.proxy && (
+                        <>
+                            <div className="col-md-4 col-12 pb-4">
+                                <label className="form-label ml-2">
+                                    {strings.name}:
+                                </label>
+                                <Span>{pageState.props.proxy.name}</Span>
+                            </div>
+                            <div className="col-md-4 col-12 pb-4">
+                                <label className="form-label ml-2">
+                                    {strings.family}:
+                                </label>
+                                <Span>{pageState.props.proxy.family}</Span>
+                            </div>
+                            <div className="col-md-4 col-12 pb-4">
+                                <label className="form-label ml-2">
+                                    {strings.nationalCode}:
+                                </label>
+                                <Span>
+                                    {pageState.props.proxy.nationalCode}
+                                </Span>
+                            </div>
+                            <div className="col-12 pb-4">
+                                <span className="ml-2">
+                                    {strings.votedType}:
+                                </span>
+                                <Span
+                                    spanStyle={{
+                                        color: pageState.props.proxy.votedAt
+                                            ? "green"
+                                            : "rgb(133 95 4)",
+                                    }}
+                                >
+                                    {pageState.props.proxy.votedTypeText}
+                                </Span>
+                                {pageState.props.proxy.votedAt && (
+                                    <>
+                                        <Span>
+                                            {pageState.props.item.votedAtFa}
+                                        </Span>
+                                        <Span>
+                                            [ {pageState.props.item.username} ]
+                                        </Span>
+                                    </>
+                                )}
+                            </div>
+                        </>
+                    )}
+                </>
             );
         }
 
@@ -150,100 +184,116 @@ const Vote = () => {
         return <></>;
     };
 
-    const renderShareholder = () => {
+    const renderVoteProxical = () => {
         if (
             pageState?.props?.item?.votedAt &&
             pageState?.props?.item?.votedType === VOTED_TYPES.PERSONAL &&
             pageState?.props?.item?.proxicalCount < 3
         ) {
             return (
-                <FormCard
-                    pageUtils={pageUtils}
-                    hasSubmit={
-                        pageState?.props?.proxy &&
-                        !pageState.props.proxy.votedAt &&
-                        pageState?.props?.proxy?.id !==
-                            pageState?.props?.item?.id
-                    }
-                    hasCancel={false}
-                >
+                <>
                     <h6>{strings.voteProxical}</h6>
-                    <div className="col-12 pt-4">
-                        <div className="row">
-                            <InputTextColumn
-                                field={"nationalCode"}
-                                inputStyle={{
-                                    textAlign: "left",
-                                    direction: "ltr",
-                                }}
-                            />
-                            <div
-                                className="col pr-0 d-flex align-items-center"
-                                style={{ marginBottom: "10px" }}
-                            >
-                                <button
-                                    className="btn btn-warning px-4 ml-2"
-                                    type="button"
-                                    title={general.search}
-                                    onClick={pageUtils.useForm.handleSubmit(
-                                        pageUtils.onSearch
-                                    )}
-                                    disabled={layoutState?.loading}
+                    <FormCard
+                        pageUtils={pageUtils}
+                        hasSubmit={
+                            pageState?.props?.shareholder &&
+                            !pageState.props.shareholder.votedAt &&
+                            pageState?.props?.shareholder?.id !==
+                                pageState?.props?.item?.id
+                        }
+                        onSubmit={pageUtils?.onSubmitVoteForShareholder}
+                        hasCancel={false}
+                    >
+                        <div className="col-12 pt-4">
+                            <div className="row">
+                                <InputTextColumn
+                                    field={"shareholderNationalCode"}
+                                    inputStyle={{
+                                        textAlign: "left",
+                                        direction: "ltr",
+                                    }}
+                                />
+                                <div
+                                    className="col pr-0 d-flex align-items-center"
+                                    style={{ marginBottom: "10px" }}
                                 >
-                                    {general.search}
-                                </button>
+                                    <button
+                                        className="btn btn-warning px-4 ml-2"
+                                        type="button"
+                                        title={general.search}
+                                        onClick={pageUtils.useForm.handleSubmit(
+                                            pageUtils.onSearchShareholder
+                                        )}
+                                        disabled={layoutState?.loading}
+                                    >
+                                        {general.search}
+                                    </button>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    {pageState?.props?.proxy && (
-                        <>
-                            <div className="col-md-3 col-12 pb-4">
-                                <label className="form-label ml-2">
-                                    {strings.name}:
-                                </label>
-                                <Span>{pageState.props.proxy.name}</Span>
-                            </div>
-                            <div className="col-md-3 col-12 pb-4">
-                                <label className="form-label ml-2">
-                                    {strings.family}:
-                                </label>
-                                <Span>{pageState.props.proxy.family}</Span>
-                            </div>
-                            <div className="col-md-3 col-12 pb-4">
-                                <label className="form-label ml-2">
-                                    {strings.nationalCode}:
-                                </label>
-                                <Span>
-                                    {pageState.props.proxy.nationalCode}
-                                </Span>
-                            </div>
-                            <div className="col-12 pb-4">
-                                <span className="ml-2">
-                                    {strings.votedType}:
-                                </span>
-                                <Span
-                                    spanStyle={{
-                                        color: pageState.props.proxy.votedAt
-                                            ? "green"
-                                            : "rgb(133 95 4)",
-                                    }}
-                                >
-                                    {pageState.props.proxy.votedTypeText}
-                                </Span>
-                                {pageState.props.proxy.votedAt && (
-                                    <>
-                                        <Span>
-                                            {pageState.props.item.votedAtFa}
-                                        </Span>
-                                        <Span>
-                                            [ {pageState.props.item.username} ]
-                                        </Span>
-                                    </>
-                                )}
-                            </div>
-                        </>
-                    )}
-                </FormCard>
+                        {pageState?.props?.shareholder && (
+                            <>
+                                <div className="col-md-3 col-12 pb-4">
+                                    <label className="form-label ml-2">
+                                        {strings.name}:
+                                    </label>
+                                    <Span>
+                                        {pageState.props.shareholder.name}
+                                    </Span>
+                                </div>
+                                <div className="col-md-3 col-12 pb-4">
+                                    <label className="form-label ml-2">
+                                        {strings.family}:
+                                    </label>
+                                    <Span>
+                                        {pageState.props.shareholder.family}
+                                    </Span>
+                                </div>
+                                <div className="col-md-3 col-12 pb-4">
+                                    <label className="form-label ml-2">
+                                        {strings.nationalCode}:
+                                    </label>
+                                    <Span>
+                                        {
+                                            pageState.props.shareholder
+                                                .nationalCode
+                                        }
+                                    </Span>
+                                </div>
+                                <div className="col-12 pb-4">
+                                    <span className="ml-2">
+                                        {strings.votedType}:
+                                    </span>
+                                    <Span
+                                        spanStyle={{
+                                            color: pageState.props.shareholder
+                                                .votedAt
+                                                ? "green"
+                                                : "rgb(133 95 4)",
+                                        }}
+                                    >
+                                        {
+                                            pageState.props.shareholder
+                                                .votedTypeText
+                                        }
+                                    </Span>
+                                    {pageState.props.shareholder.votedAt && (
+                                        <>
+                                            <Span>
+                                                {pageState.props.item.votedAtFa}
+                                            </Span>
+                                            <Span>
+                                                [{" "}
+                                                {pageState.props.item.username}{" "}
+                                                ]
+                                            </Span>
+                                        </>
+                                    )}
+                                </div>
+                            </>
+                        )}
+                    </FormCard>
+                </>
             );
         }
         return <></>;
@@ -341,7 +391,7 @@ const Vote = () => {
                 <LabelColumn field={"name"} />
                 <LabelColumn field={"family"} />
                 <LabelColumn field={"nationalCode"} />
-                <div className={"col-md-6 col-12 pb-4"}>
+                <div className={"col-12 pb-4"}>
                     <span className="ml-2">{strings.votedType}:</span>
                     <Span
                         spanStyle={{
@@ -368,13 +418,18 @@ const Vote = () => {
                         VOTED_TYPES.NOT_SHAREHOLDER && (
                         <Span>{`${pageState?.props?.item?.notShareholderName} ${pageState?.props?.item?.notShareholderFamily} - ${pageState?.props?.item?.notShareholderNationalCode}`}</Span>
                     )}
+                    {pageState?.props?.item?.votedAt && (
+                        <Span>
+                            {pageState?.props?.item?.votedAtFa} - [{" "}
+                            {pageState?.props?.item?.username} ]
+                        </Span>
+                    )}
                 </div>
-                {renderVoterInfo()}
                 {renderVoter()}
                 {renderProxicalVoter()}
                 {renderNotShareholderVoter()}
             </FormCard>
-            {renderShareholder()}
+            {renderVoteProxical()}
             {pageState?.props?.item?.votedAt &&
                 pageState?.props?.item?.votedType === VOTED_TYPES.PERSONAL && (
                     <>
