@@ -2,6 +2,7 @@ import { validation } from "../../../constants/strings";
 
 const validate = (schema, field) => {
     return schema
+        .matches(/^[0-9]+$/, validation.numberMessage.replace(":field", field))
         .min(
             10,
             validation.minDigitMessage
@@ -13,8 +14,7 @@ const validate = (schema, field) => {
             validation.maxDigitMessage
                 .replace(":field", field)
                 .replace(":max", "10")
-        )
-        .matches(/^[0-9]+$/, validation.numberMessage.replace(":field", field));
+        );
 };
 
 const nationalCodeValidator = (schema, field, required = true) => {

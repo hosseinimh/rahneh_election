@@ -15,10 +15,17 @@ export class Voter extends Entity {
         });
     }
 
-    async getVotedPaginate(name, nationalCode, _pn = 1, _pi = PAGE_ITEMS) {
+    async getVotedPaginate(
+        name,
+        nationalCode,
+        votedType,
+        _pn = 1,
+        _pi = PAGE_ITEMS
+    ) {
         return await this.handlePost(`${BASE_URL}/a/voters/voted`, {
             name: name ?? "",
             national_code: nationalCode ?? "",
+            voted_type: votedType,
             _pn,
             _pi,
         });

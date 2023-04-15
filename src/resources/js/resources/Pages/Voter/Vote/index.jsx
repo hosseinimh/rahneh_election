@@ -391,7 +391,7 @@ const Vote = () => {
                 <LabelColumn field={"name"} />
                 <LabelColumn field={"family"} />
                 <LabelColumn field={"nationalCode"} />
-                <div className={"col-12 pb-4"}>
+                <div className={"col-12 pb-4 d-flex"}>
                     <span className="ml-2">{strings.votedType}:</span>
                     <Span
                         spanStyle={{
@@ -420,7 +420,7 @@ const Vote = () => {
                     )}
                     {pageState?.props?.item?.votedAt && (
                         <Span>
-                            {pageState?.props?.item?.votedAtFa} - [{" "}
+                            {pageState?.props?.item?.votedAtFa} [{" "}
                             {pageState?.props?.item?.username} ]
                         </Span>
                     )}

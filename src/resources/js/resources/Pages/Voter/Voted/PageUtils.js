@@ -10,7 +10,7 @@ import {
 } from "../../../../state/page/pageActions";
 import { votedPage as strings, voteTypes } from "../../../../constants/strings";
 import { BasePageUtils } from "../../../../utils/BasePageUtils";
-import { BASE_PATH } from "../../../../constants";
+import { BASE_PATH, VOTED_TYPES } from "../../../../constants";
 import utils from "../../../../utils/Utils";
 import { searchUserSchema as schema } from "../../../validations";
 
@@ -67,6 +67,7 @@ export class PageUtils extends BasePageUtils {
         const result = await this.entity.getVotedPaginate(
             data?.name ?? "",
             data?.nationalCode ?? "",
+            parseInt(data?.voter ?? VOTED_TYPES.NOT_VOTED),
             this.pageState.props?.pageNumber ?? 1
         );
         this.handleFetchResultWithCallback(

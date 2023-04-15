@@ -6647,6 +6647,7 @@ var votedPage = {
   nationalCodePlaceholder: "شماره ملی",
   actions: "عملیات",
   nameFamily: "نام و نام خانوادگی",
+  voter: "رای‌دهنده",
   voteStatus: "وضعیت رای‌دهی",
   votedCount: "تعداد آراء اخذ شده",
   vote: "رای",
@@ -7475,19 +7476,20 @@ var Voter = /*#__PURE__*/function (_Entity) {
   }, {
     key: "getVotedPaginate",
     value: function () {
-      var _getVotedPaginate = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(name, nationalCode) {
+      var _getVotedPaginate = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(name, nationalCode, votedType) {
         var _pn,
           _pi,
           _args2 = arguments;
         return _regeneratorRuntime().wrap(function _callee2$(_context2) {
           while (1) switch (_context2.prev = _context2.next) {
             case 0:
-              _pn = _args2.length > 2 && _args2[2] !== undefined ? _args2[2] : 1;
-              _pi = _args2.length > 3 && _args2[3] !== undefined ? _args2[3] : _constants__WEBPACK_IMPORTED_MODULE_0__.PAGE_ITEMS;
+              _pn = _args2.length > 3 && _args2[3] !== undefined ? _args2[3] : 1;
+              _pi = _args2.length > 4 && _args2[4] !== undefined ? _args2[4] : _constants__WEBPACK_IMPORTED_MODULE_0__.PAGE_ITEMS;
               _context2.next = 4;
               return this.handlePost("".concat(_constants__WEBPACK_IMPORTED_MODULE_0__.BASE_URL, "/a/voters/voted"), {
                 name: name !== null && name !== void 0 ? name : "",
                 national_code: nationalCode !== null && nationalCode !== void 0 ? nationalCode : "",
+                voted_type: votedType,
                 _pn: _pn,
                 _pi: _pi
               });
@@ -7499,7 +7501,7 @@ var Voter = /*#__PURE__*/function (_Entity) {
           }
         }, _callee2, this);
       }));
-      function getVotedPaginate(_x3, _x4) {
+      function getVotedPaginate(_x3, _x4, _x5) {
         return _getVotedPaginate.apply(this, arguments);
       }
       return getVotedPaginate;
@@ -7521,7 +7523,7 @@ var Voter = /*#__PURE__*/function (_Entity) {
           }
         }, _callee3, this);
       }));
-      function get(_x5) {
+      function get(_x6) {
         return _get.apply(this, arguments);
       }
       return get;
@@ -7545,7 +7547,7 @@ var Voter = /*#__PURE__*/function (_Entity) {
           }
         }, _callee4, this);
       }));
-      function getByNationalCode(_x6) {
+      function getByNationalCode(_x7) {
         return _getByNationalCode.apply(this, arguments);
       }
       return getByNationalCode;
@@ -7567,7 +7569,7 @@ var Voter = /*#__PURE__*/function (_Entity) {
           }
         }, _callee5, this);
       }));
-      function personalVote(_x7) {
+      function personalVote(_x8) {
         return _personalVote.apply(this, arguments);
       }
       return personalVote;
@@ -7591,7 +7593,7 @@ var Voter = /*#__PURE__*/function (_Entity) {
           }
         }, _callee6, this);
       }));
-      function proxicalVote(_x8, _x9) {
+      function proxicalVote(_x9, _x10) {
         return _proxicalVote.apply(this, arguments);
       }
       return proxicalVote;
@@ -7617,7 +7619,7 @@ var Voter = /*#__PURE__*/function (_Entity) {
           }
         }, _callee7, this);
       }));
-      function notShareholderVote(_x10, _x11, _x12, _x13) {
+      function notShareholderVote(_x11, _x12, _x13, _x14) {
         return _notShareholderVote.apply(this, arguments);
       }
       return notShareholderVote;
@@ -7641,7 +7643,7 @@ var Voter = /*#__PURE__*/function (_Entity) {
           }
         }, _callee8, this);
       }));
-      function voteForShareholder(_x14, _x15) {
+      function voteForShareholder(_x15, _x16) {
         return _voteForShareholder.apply(this, arguments);
       }
       return voteForShareholder;
@@ -9956,7 +9958,7 @@ var Vote = function Vote() {
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_components__WEBPACK_IMPORTED_MODULE_2__.LabelColumn, {
         field: "nationalCode"
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
-        className: "col-12 pb-4",
+        className: "col-12 pb-4 d-flex",
         children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("span", {
           className: "ml-2",
           children: [_constants_strings__WEBPACK_IMPORTED_MODULE_4__.votePage.votedType, ":"]
@@ -9976,7 +9978,7 @@ var Vote = function Vote() {
         }), (pageState === null || pageState === void 0 ? void 0 : (_pageState$props39 = pageState.props) === null || _pageState$props39 === void 0 ? void 0 : (_pageState$props39$it = _pageState$props39.item) === null || _pageState$props39$it === void 0 ? void 0 : _pageState$props39$it.votedType) === _constants__WEBPACK_IMPORTED_MODULE_5__.VOTED_TYPES.NOT_SHAREHOLDER && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_components__WEBPACK_IMPORTED_MODULE_2__.Span, {
           children: "".concat(pageState === null || pageState === void 0 ? void 0 : (_pageState$props40 = pageState.props) === null || _pageState$props40 === void 0 ? void 0 : (_pageState$props40$it = _pageState$props40.item) === null || _pageState$props40$it === void 0 ? void 0 : _pageState$props40$it.notShareholderName, " ").concat(pageState === null || pageState === void 0 ? void 0 : (_pageState$props41 = pageState.props) === null || _pageState$props41 === void 0 ? void 0 : (_pageState$props41$it = _pageState$props41.item) === null || _pageState$props41$it === void 0 ? void 0 : _pageState$props41$it.notShareholderFamily, " - ").concat(pageState === null || pageState === void 0 ? void 0 : (_pageState$props42 = pageState.props) === null || _pageState$props42 === void 0 ? void 0 : (_pageState$props42$it = _pageState$props42.item) === null || _pageState$props42$it === void 0 ? void 0 : _pageState$props42$it.notShareholderNationalCode)
         }), (pageState === null || pageState === void 0 ? void 0 : (_pageState$props43 = pageState.props) === null || _pageState$props43 === void 0 ? void 0 : (_pageState$props43$it = _pageState$props43.item) === null || _pageState$props43$it === void 0 ? void 0 : _pageState$props43$it.votedAt) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)(_components__WEBPACK_IMPORTED_MODULE_2__.Span, {
-          children: [pageState === null || pageState === void 0 ? void 0 : (_pageState$props44 = pageState.props) === null || _pageState$props44 === void 0 ? void 0 : (_pageState$props44$it = _pageState$props44.item) === null || _pageState$props44$it === void 0 ? void 0 : _pageState$props44$it.votedAtFa, " - [", " ", pageState === null || pageState === void 0 ? void 0 : (_pageState$props45 = pageState.props) === null || _pageState$props45 === void 0 ? void 0 : (_pageState$props45$it = _pageState$props45.item) === null || _pageState$props45$it === void 0 ? void 0 : _pageState$props45$it.username, " ]"]
+          children: [pageState === null || pageState === void 0 ? void 0 : (_pageState$props44 = pageState.props) === null || _pageState$props44 === void 0 ? void 0 : (_pageState$props44$it = _pageState$props44.item) === null || _pageState$props44$it === void 0 ? void 0 : _pageState$props44$it.votedAtFa, " [", " ", pageState === null || pageState === void 0 ? void 0 : (_pageState$props45 = pageState.props) === null || _pageState$props45 === void 0 ? void 0 : (_pageState$props45$it = _pageState$props45.item) === null || _pageState$props45$it === void 0 ? void 0 : _pageState$props45$it.username, " ]"]
         })]
       }), renderVoter(), renderProxicalVoter(), renderNotShareholderVoter()]
     }), renderVoteProxical(), (pageState === null || pageState === void 0 ? void 0 : (_pageState$props46 = pageState.props) === null || _pageState$props46 === void 0 ? void 0 : (_pageState$props46$it = _pageState$props46.item) === null || _pageState$props46$it === void 0 ? void 0 : _pageState$props46$it.votedAt) && (pageState === null || pageState === void 0 ? void 0 : (_pageState$props47 = pageState.props) === null || _pageState$props47 === void 0 ? void 0 : (_pageState$props47$it = _pageState$props47.item) === null || _pageState$props47$it === void 0 ? void 0 : _pageState$props47$it.votedType) === _constants__WEBPACK_IMPORTED_MODULE_5__.VOTED_TYPES.PERSONAL && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.Fragment, {
@@ -10103,6 +10105,7 @@ var PageUtils = /*#__PURE__*/function (_BasePageUtils) {
       var _fillForm = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
         var _data$name,
           _data$nationalCode,
+          _data$voter,
           _this$pageState$props,
           _this$pageState$props2,
           _this2 = this;
@@ -10115,7 +10118,7 @@ var PageUtils = /*#__PURE__*/function (_BasePageUtils) {
               data = _args.length > 0 && _args[0] !== undefined ? _args[0] : null;
               this.dispatch((0,_state_layout_layoutActions__WEBPACK_IMPORTED_MODULE_2__.setLoadingAction)(true));
               _context.next = 4;
-              return this.entity.getVotedPaginate((_data$name = data === null || data === void 0 ? void 0 : data.name) !== null && _data$name !== void 0 ? _data$name : "", (_data$nationalCode = data === null || data === void 0 ? void 0 : data.nationalCode) !== null && _data$nationalCode !== void 0 ? _data$nationalCode : "", (_this$pageState$props = (_this$pageState$props2 = this.pageState.props) === null || _this$pageState$props2 === void 0 ? void 0 : _this$pageState$props2.pageNumber) !== null && _this$pageState$props !== void 0 ? _this$pageState$props : 1);
+              return this.entity.getVotedPaginate((_data$name = data === null || data === void 0 ? void 0 : data.name) !== null && _data$name !== void 0 ? _data$name : "", (_data$nationalCode = data === null || data === void 0 ? void 0 : data.nationalCode) !== null && _data$nationalCode !== void 0 ? _data$nationalCode : "", parseInt((_data$voter = data === null || data === void 0 ? void 0 : data.voter) !== null && _data$voter !== void 0 ? _data$voter : _constants__WEBPACK_IMPORTED_MODULE_6__.VOTED_TYPES.NOT_VOTED), (_this$pageState$props = (_this$pageState$props2 = this.pageState.props) === null || _this$pageState$props2 === void 0 ? void 0 : _this$pageState$props2.pageNumber) !== null && _this$pageState$props !== void 0 ? _this$pageState$props : 1);
             case 4:
               result = _context.sent;
               this.handleFetchResultWithCallback(result, function () {
@@ -10173,7 +10176,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../components */ "./resources/js/resources/components/index.js");
 /* harmony import */ var _utils_Utils__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../../utils/Utils */ "./resources/js/utils/Utils.js");
 /* harmony import */ var _PageUtils__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./PageUtils */ "./resources/js/resources/Pages/Voter/Voted/PageUtils.js");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+/* harmony import */ var _constants__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../../../constants */ "./resources/js/constants/index.js");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
 
 
 
@@ -10182,6 +10186,20 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
+var voteTyeItems = [{
+  id: 0,
+  value: "------"
+}, {
+  id: _constants__WEBPACK_IMPORTED_MODULE_6__.VOTED_TYPES.PERSONAL,
+  value: _constants_strings__WEBPACK_IMPORTED_MODULE_2__.voteTypes.personal
+}, {
+  id: _constants__WEBPACK_IMPORTED_MODULE_6__.VOTED_TYPES.PROXICAL,
+  value: _constants_strings__WEBPACK_IMPORTED_MODULE_2__.voteTypes.proxical
+}, {
+  id: _constants__WEBPACK_IMPORTED_MODULE_6__.VOTED_TYPES.NOT_SHAREHOLDER,
+  value: _constants_strings__WEBPACK_IMPORTED_MODULE_2__.voteTypes.notShareholder
+}];
 var Voted = function Voted() {
   var layoutState = (0,react_redux__WEBPACK_IMPORTED_MODULE_1__.useSelector)(function (state) {
     return state.layoutReducer;
@@ -10192,43 +10210,46 @@ var Voted = function Voted() {
   var columnsCount = 5;
   var pageUtils = new _PageUtils__WEBPACK_IMPORTED_MODULE_5__.PageUtils();
   var renderSearch = function renderSearch() {
-    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
+    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
       className: "row",
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_components__WEBPACK_IMPORTED_MODULE_3__.InputTextColumn, {
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_components__WEBPACK_IMPORTED_MODULE_3__.InputTextColumn, {
         field: "nationalCode",
         inputStyle: {
           textAlign: "left",
           direction: "ltr"
         }
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_components__WEBPACK_IMPORTED_MODULE_3__.InputTextColumn, {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_components__WEBPACK_IMPORTED_MODULE_3__.InputTextColumn, {
         field: "name"
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_components__WEBPACK_IMPORTED_MODULE_3__.InputSelectColumn, {
+        field: "voter",
+        items: voteTyeItems
       })]
     });
   };
   var renderHeader = function renderHeader() {
-    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("tr", {
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("th", {
+    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("tr", {
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("th", {
         scope: "col",
         style: {
           width: "50px"
         },
         children: "#"
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("th", {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("th", {
         scope: "col",
         style: {
           width: "100px"
         },
         children: _constants_strings__WEBPACK_IMPORTED_MODULE_2__.votedPage.actions
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("th", {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("th", {
         scope: "col",
         children: _constants_strings__WEBPACK_IMPORTED_MODULE_2__.votedPage.nameFamily
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("th", {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("th", {
         scope: "col",
         style: {
           width: "150px"
         },
         children: _constants_strings__WEBPACK_IMPORTED_MODULE_2__.votedPage.voteStatus
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("th", {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("th", {
         scope: "col",
         style: {
           width: "150px"
@@ -10241,12 +10262,12 @@ var Voted = function Voted() {
     var _pageState$props, _pageState$props$item;
     var children = pageState === null || pageState === void 0 ? void 0 : (_pageState$props = pageState.props) === null || _pageState$props === void 0 ? void 0 : (_pageState$props$item = _pageState$props.items) === null || _pageState$props$item === void 0 ? void 0 : _pageState$props$item.map(function (item, index) {
       var _pageState$props2;
-      return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("tr", {
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("td", {
+      return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("tr", {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("td", {
           scope: "row",
           children: _utils_Utils__WEBPACK_IMPORTED_MODULE_4__["default"].en2faDigits(((pageState === null || pageState === void 0 ? void 0 : (_pageState$props2 = pageState.props) === null || _pageState$props2 === void 0 ? void 0 : _pageState$props2.pageNumber) - 1) * 10 + index + 1)
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("td", {
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("button", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("td", {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("button", {
             type: "button",
             className: "btn btn-warning mb-2 px-4",
             onClick: function onClick() {
@@ -10256,32 +10277,32 @@ var Voted = function Voted() {
             disabled: layoutState === null || layoutState === void 0 ? void 0 : layoutState.loading,
             children: _constants_strings__WEBPACK_IMPORTED_MODULE_2__.general.view
           })
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("td", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("td", {
           children: "".concat(item.name, " ").concat(item.family)
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("td", {
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("span", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("td", {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("span", {
             style: {
               color: item.votedAt ? "green" : "rgb(133 95 4)"
             },
             children: item.votedTypeText
           })
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("td", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("td", {
           children: item.nationalCode
         })]
       }, item.id);
     });
-    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_components__WEBPACK_IMPORTED_MODULE_3__.TableItems, {
+    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_components__WEBPACK_IMPORTED_MODULE_3__.TableItems, {
       columnsCount: columnsCount,
       children: children
     });
   };
   var renderFooter = function renderFooter() {
-    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_components__WEBPACK_IMPORTED_MODULE_3__.TableFooter, {
+    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_components__WEBPACK_IMPORTED_MODULE_3__.TableFooter, {
       columnsCount: columnsCount,
       pageUtils: pageUtils
     });
   };
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_components__WEBPACK_IMPORTED_MODULE_3__.ListPage, {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_components__WEBPACK_IMPORTED_MODULE_3__.ListPage, {
     pageUtils: pageUtils,
     table: {
       renderHeader: renderHeader,
@@ -10289,7 +10310,7 @@ var Voted = function Voted() {
       renderFooter: renderFooter
     },
     hasAdd: false,
-    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_components__WEBPACK_IMPORTED_MODULE_3__.SearchBox, {
+    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_components__WEBPACK_IMPORTED_MODULE_3__.SearchBox, {
       pageUtils: pageUtils,
       onSubmit: pageUtils.onSubmit,
       onReset: pageUtils.onReset,
@@ -13902,7 +13923,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _constants_strings__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../constants/strings */ "./resources/js/constants/strings.js");
 
 var validate = function validate(schema, field) {
-  return schema.min(2, _constants_strings__WEBPACK_IMPORTED_MODULE_0__.validation.minMessage.replace(":field", field).replace(":min", "2")).max(50, _constants_strings__WEBPACK_IMPORTED_MODULE_0__.validation.maxMessage.replace(":field", field).replace(":max", "50")).matches(/^[a-zA-Z ]+$/, _constants_strings__WEBPACK_IMPORTED_MODULE_0__.validation.stringMessage.replace(":field", field));
+  return schema.matches(/^[a-zA-Z ]+$/, _constants_strings__WEBPACK_IMPORTED_MODULE_0__.validation.stringMessage.replace(":field", field)).min(2, _constants_strings__WEBPACK_IMPORTED_MODULE_0__.validation.minMessage.replace(":field", field).replace(":min", "2")).max(50, _constants_strings__WEBPACK_IMPORTED_MODULE_0__.validation.maxMessage.replace(":field", field).replace(":max", "50"));
 };
 var nameValidator = function nameValidator(schema, field) {
   var required = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : true;
@@ -13929,7 +13950,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _constants_strings__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../constants/strings */ "./resources/js/constants/strings.js");
 
 var validate = function validate(schema, field) {
-  return schema.min(10, _constants_strings__WEBPACK_IMPORTED_MODULE_0__.validation.minDigitMessage.replace(":field", field).replace(":min", "10")).max(10, _constants_strings__WEBPACK_IMPORTED_MODULE_0__.validation.maxDigitMessage.replace(":field", field).replace(":max", "10")).matches(/^[0-9]+$/, _constants_strings__WEBPACK_IMPORTED_MODULE_0__.validation.numberMessage.replace(":field", field));
+  return schema.matches(/^[0-9]+$/, _constants_strings__WEBPACK_IMPORTED_MODULE_0__.validation.numberMessage.replace(":field", field)).min(10, _constants_strings__WEBPACK_IMPORTED_MODULE_0__.validation.minDigitMessage.replace(":field", field).replace(":min", "10")).max(10, _constants_strings__WEBPACK_IMPORTED_MODULE_0__.validation.maxDigitMessage.replace(":field", field).replace(":max", "10"));
 };
 var nationalCodeValidator = function nationalCodeValidator(schema, field) {
   var required = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : true;

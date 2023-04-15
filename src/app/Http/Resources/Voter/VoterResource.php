@@ -32,7 +32,7 @@ class VoterResource extends JsonResource
             'votedType' => intval($this->voted_type),
             'votedTypeText' => $this->getVotedType(intval($this->voted_type)),
             'votedAt' => $this->voted_at,
-            'votedAtFa' => $this->voted_at ? Helper::localeNumbers(Helper::faDate2($this->voted_at)) : '',
+            'votedAtFa' => $this->voted_at ? Helper::localeNumbers(Helper::faDate($this->voted_at)) : '',
             'proxicalCount' => $this->proxicalCount(),
             'voter' => $this->voted_type === VotedType::PROXICAL ? new VoterResource($this->voter) : null,
             'notShareholderNationalCode' => Helper::localeNumbers($this->not_shareholder_national_code),

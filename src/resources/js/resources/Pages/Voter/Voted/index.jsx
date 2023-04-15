@@ -7,6 +7,7 @@ import {
     general,
 } from "../../../../constants/strings";
 import {
+    InputSelectColumn,
     InputTextColumn,
     ListPage,
     SearchBox,
@@ -15,6 +16,14 @@ import {
 } from "../../../components";
 import utils from "../../../../utils/Utils";
 import { PageUtils } from "./PageUtils";
+import { VOTED_TYPES } from "../../../../constants";
+
+const voteTyeItems = [
+    { id: 0, value: "------" },
+    { id: VOTED_TYPES.PERSONAL, value: voteTypes.personal },
+    { id: VOTED_TYPES.PROXICAL, value: voteTypes.proxical },
+    { id: VOTED_TYPES.NOT_SHAREHOLDER, value: voteTypes.notShareholder },
+];
 
 const Voted = () => {
     const layoutState = useSelector((state) => state.layoutReducer);
@@ -32,6 +41,7 @@ const Voted = () => {
                 }}
             />
             <InputTextColumn field="name" />
+            <InputSelectColumn field={"voter"} items={voteTyeItems} />
         </div>
     );
 

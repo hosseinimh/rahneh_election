@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Administrator;
 
+use App\Constants\VotedType;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Voter\IndexVotersRequest;
 use App\Http\Requests\Voter\NotShareholderVoteRequest;
@@ -40,9 +41,10 @@ class VoterController extends Controller
     {
         $name = $request->name ?? '';
         $nationalCode = $request->national_code ?? '';
+        $votedType = in_array($request->voted_type, [VotedType::PERSONAL, VotedType::PROXICAL, VotedType::NOT_SHAREHOLDER]) ? $request->voted_type : VotedType::NOT_VOTED;
         $items = [
-            'items' => VoterResource::collection($this->service->getVotedPaginate($name, $nationalCode, $request->_pn, $request->_pi)),
-            'itemsCount' => $this->service->countVoted($name, $nationalCode),
+            'items' => VoterResource::collection($this->service->getVotedPaginate($name, $nationalCode, $votedType, $request->_pn, $request->_pi)),
+            'itemsCount' => $this->service->countVoted($name, $nationalCode, $votedType),
             'votedCount' => $this->service->countVoted(),
             'personalVotedCount' => $this->service->countPersonalVoted(),
             'proxicalVotedCount' => $this->service->countProxicalVoted(),

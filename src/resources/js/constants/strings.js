@@ -189,6 +189,7 @@ export const votedPage = {
     nationalCodePlaceholder: "شماره ملی",
     actions: "عملیات",
     nameFamily: "نام و نام خانوادگی",
+    voter: "رای‌دهنده",
     voteStatus: "وضعیت رای‌دهی",
     votedCount: "تعداد آراء اخذ شده",
     vote: "رای",
