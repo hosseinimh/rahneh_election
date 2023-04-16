@@ -19,7 +19,7 @@ import {
     votePage as strings,
     voteTypes,
 } from "../../../../constants/strings";
-import { VOTED_TYPES } from "../../../../constants";
+import { BASE_PATH, VOTED_TYPES } from "../../../../constants";
 import utils from "../../../../utils/Utils";
 
 const voteTyeItems = [
@@ -121,7 +121,7 @@ const Vote = () => {
                                     {pageState.props.proxy.nationalCode}
                                 </Span>
                             </div>
-                            <div className="col-12 pb-4">
+                            <div className={"col-12 pb-4 d-flex"}>
                                 <span className="ml-2">
                                     {strings.votedType}:
                                 </span>
@@ -134,15 +134,29 @@ const Vote = () => {
                                 >
                                     {pageState.props.proxy.votedTypeText}
                                 </Span>
-                                {pageState.props.proxy.votedAt && (
-                                    <>
-                                        <Span>
-                                            {pageState.props.item.votedAtFa}
-                                        </Span>
-                                        <Span>
-                                            [ {pageState.props.item.username} ]
-                                        </Span>
-                                    </>
+                                {pageState?.props?.proxy?.votedType ===
+                                    VOTED_TYPES.PROXICAL && (
+                                    <CustomLink
+                                        link={`${BASE_PATH}/voters/vote/${pageState?.props?.proxy?.voter?.id}`}
+                                        onClick={() =>
+                                            pageUtils.onView(
+                                                pageState?.props?.proxy?.voter
+                                                    ?.id
+                                            )
+                                        }
+                                    >
+                                        <Span>{`${pageState?.props?.proxy?.voter?.name} ${pageState?.props?.proxy?.voter?.family} - ${pageState?.props?.proxy?.voter?.nationalCode}`}</Span>
+                                    </CustomLink>
+                                )}
+                                {pageState?.props?.proxy?.votedType ===
+                                    VOTED_TYPES.NOT_SHAREHOLDER && (
+                                    <Span>{`${pageState?.props?.proxy?.notShareholderName} ${pageState?.props?.proxy?.notShareholderFamily} - ${pageState?.props?.proxy?.notShareholderNationalCode}`}</Span>
+                                )}
+                                {pageState?.props?.proxy?.votedAt && (
+                                    <Span>
+                                        {pageState?.props?.proxy?.votedAtFa} [{" "}
+                                        {pageState?.props?.proxy?.username} ]
+                                    </Span>
                                 )}
                             </div>
                         </>
@@ -260,7 +274,7 @@ const Vote = () => {
                                         }
                                     </Span>
                                 </div>
-                                <div className="col-12 pb-4">
+                                <div className={"col-12 pb-4 d-flex"}>
                                     <span className="ml-2">
                                         {strings.votedType}:
                                     </span>
@@ -277,17 +291,39 @@ const Vote = () => {
                                                 .votedTypeText
                                         }
                                     </Span>
-                                    {pageState.props.shareholder.votedAt && (
-                                        <>
-                                            <Span>
-                                                {pageState.props.item.votedAtFa}
-                                            </Span>
-                                            <Span>
-                                                [{" "}
-                                                {pageState.props.item.username}{" "}
-                                                ]
-                                            </Span>
-                                        </>
+                                    {pageState?.props?.shareholder
+                                        ?.votedType ===
+                                        VOTED_TYPES.PROXICAL && (
+                                        <CustomLink
+                                            link={`${BASE_PATH}/voters/vote/${pageState?.props?.shareholder?.voter?.id}`}
+                                            onClick={() =>
+                                                pageUtils.onView(
+                                                    pageState?.props
+                                                        ?.shareholder?.voter?.id
+                                                )
+                                            }
+                                        >
+                                            <Span>{`${pageState?.props?.shareholder?.voter?.name} ${pageState?.props?.shareholder?.voter?.family} - ${pageState?.props?.shareholder?.voter?.nationalCode}`}</Span>
+                                        </CustomLink>
+                                    )}
+                                    {pageState?.props?.shareholder
+                                        ?.votedType ===
+                                        VOTED_TYPES.NOT_SHAREHOLDER && (
+                                        <Span>{`${pageState?.props?.shareholder?.notShareholderName} ${pageState?.props?.shareholder?.notShareholderFamily} - ${pageState?.props?.shareholder?.notShareholderNationalCode}`}</Span>
+                                    )}
+                                    {pageState?.props?.shareholder?.votedAt && (
+                                        <Span>
+                                            {
+                                                pageState?.props?.shareholder
+                                                    ?.votedAtFa
+                                            }{" "}
+                                            [{" "}
+                                            {
+                                                pageState?.props?.shareholder
+                                                    ?.username
+                                            }{" "}
+                                            ]
+                                        </Span>
                                     )}
                                 </div>
                             </>
@@ -405,6 +441,7 @@ const Vote = () => {
                     {pageState?.props?.item?.votedType ===
                         VOTED_TYPES.PROXICAL && (
                         <CustomLink
+                            link={`${BASE_PATH}/voters/vote/${pageState?.props?.item?.voter?.id}`}
                             onClick={() =>
                                 pageUtils.onView(
                                     pageState?.props?.item?.voter?.id

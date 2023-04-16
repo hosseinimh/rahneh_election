@@ -1,9 +1,9 @@
 import React from "react";
 
-const CustomLink = ({ onClick, children, className = "" }) => {
+const CustomLink = ({ onClick, children, className = "", link = "" }) => {
     return (
         <a
-            href="#"
+            href={link === "" ? "#" : link}
             onClick={(e) => {
                 e.preventDefault();
                 onClick && onClick();
