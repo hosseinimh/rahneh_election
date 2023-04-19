@@ -56,11 +56,11 @@ class VoterService
             ->leftJoin('tbl_voters AS voters1', 'tbl_voters.voter_id_1', '=', 'voters1.id')
             ->leftJoin('tbl_voters AS voters2', 'tbl_voters.voter_id_2', '=', 'voters2.id')
             ->leftJoin('tbl_voters AS voters3', 'tbl_voters.voter_id_3', '=', 'voters3.id')
-            ->where(function ($query) use($name) {
+            ->where(function ($query) use ($name) {
                 $query->where('tbl_voters.name', 'LIKE', '%' . $name . '%')
-                ->orWhere('tbl_voters.family', 'LIKE', '%' . $name . '%');
+                    ->orWhere('tbl_voters.family', 'LIKE', '%' . $name . '%');
             })
-            ->where('tbl_voters.national_code', 'LIKE', '%'. $nationalCode . '%')
+            ->where('tbl_voters.national_code', 'LIKE', '%' . $nationalCode . '%')
             ->select('tbl_voters.*', 'tbl_users.username', 'voters1.name AS voter_1_name', 'voters1.family AS voter_1_family', 'voters1.national_code AS voter_1_national_code', 'voters2.name AS voter_2_name', 'voters2.family AS voter_2_family', 'voters2.national_code AS voter_2_national_code', 'voters3.name AS voter_3_name', 'voters3.family AS voter_3_family', 'voters3.national_code AS voter_3_national_code')
             ->orderBy('tbl_voters.family', 'ASC')->orderBy('tbl_voters.name', 'ASC')->orderBy('tbl_voters.id', 'ASC')->skip(($page - 1) * $pageItems)->take($pageItems)->get();
     }
@@ -71,16 +71,16 @@ class VoterService
             ->leftJoin('tbl_voters AS voters1', 'tbl_voters.voter_id_1', '=', 'voters1.id')
             ->leftJoin('tbl_voters AS voters2', 'tbl_voters.voter_id_2', '=', 'voters2.id')
             ->leftJoin('tbl_voters AS voters3', 'tbl_voters.voter_id_3', '=', 'voters3.id')
-            ->where(function ($query) use($name) {
+            ->where(function ($query) use ($name) {
                 $query->where('tbl_voters.name', 'LIKE', '%' . $name . '%')
-                ->orWhere('tbl_voters.family', 'LIKE', '%' . $name . '%');
+                    ->orWhere('tbl_voters.family', 'LIKE', '%' . $name . '%');
             })
-            ->where('tbl_voters.national_code', 'LIKE', '%'. $nationalCode . '%')
+            ->where('tbl_voters.national_code', 'LIKE', '%' . $nationalCode . '%')
             ->whereNotNull('tbl_voters.voted_at');
-            if ($votedType !== VotedType::NOT_VOTED) {
-                $query = $query->where('tbl_voters.voted_type', $votedType);
-            }
-            return $query->select('tbl_voters.*', 'tbl_users.username', 'voters1.name AS voter_1_name', 'voters1.family AS voter_1_family', 'voters1.national_code AS voter_1_national_code', 'voters2.name AS voter_2_name', 'voters2.family AS voter_2_family', 'voters2.national_code AS voter_2_national_code', 'voters3.name AS voter_3_name', 'voters3.family AS voter_3_family', 'voters3.national_code AS voter_3_national_code')
+        if ($votedType !== VotedType::NOT_VOTED) {
+            $query = $query->where('tbl_voters.voted_type', $votedType);
+        }
+        return $query->select('tbl_voters.*', 'tbl_users.username', 'voters1.name AS voter_1_name', 'voters1.family AS voter_1_family', 'voters1.national_code AS voter_1_national_code', 'voters2.name AS voter_2_name', 'voters2.family AS voter_2_family', 'voters2.national_code AS voter_2_national_code', 'voters3.name AS voter_3_name', 'voters3.family AS voter_3_family', 'voters3.national_code AS voter_3_national_code')
             ->orderBy('tbl_voters.family', 'ASC')->orderBy('tbl_voters.name', 'ASC')->orderBy('tbl_voters.id', 'ASC')->skip(($page - 1) * $pageItems)->take($pageItems)->get();
     }
 
@@ -113,7 +113,7 @@ class VoterService
             ];
             $model->update($data);
             $data = [
-                'voter_id_'.$index => $model->id,
+                'voter_id_' . $index => $model->id,
             ];
             $voter->update($data);
             DB::commit();
@@ -154,7 +154,7 @@ class VoterService
             $index = $this->getProxyIndex($model);
             DB::beginTransaction();
             $data = [
-                'voter_id_'.$index => $voter->id,
+                'voter_id_' . $index => $voter->id,
             ];
             $model->update($data);
             $data = [
@@ -177,11 +177,11 @@ class VoterService
             ->leftJoin('tbl_voters AS voters1', 'tbl_voters.voter_id_1', '=', 'voters1.id')
             ->leftJoin('tbl_voters AS voters2', 'tbl_voters.voter_id_2', '=', 'voters2.id')
             ->leftJoin('tbl_voters AS voters3', 'tbl_voters.voter_id_3', '=', 'voters3.id')
-            ->where(function ($query) use($name) {
+            ->where(function ($query) use ($name) {
                 $query->where('tbl_voters.name', 'LIKE', '%' . $name . '%')
-                ->orWhere('tbl_voters.family', 'LIKE', '%' . $name . '%');
+                    ->orWhere('tbl_voters.family', 'LIKE', '%' . $name . '%');
             })
-            ->where('tbl_voters.national_code', 'LIKE', '%'. $nationalCode . '%')
+            ->where('tbl_voters.national_code', 'LIKE', '%' . $nationalCode . '%')
             ->count();
     }
     public function countVoted(string $name = '', string $nationalCode = '', int $votedType = VotedType::NOT_VOTED): int
@@ -239,7 +239,7 @@ class VoterService
         }
     }
 
-    private function checkNotShareholderVoteOnce(Model $voter)
+    private function checkNotShareholderVoteOnce(mixed $voter)
     {
         if ($voter && $voter instanceof Voter) {
             throw new Exception(__('voter.not_shareholder_voter_voted'), ErrorCode::CUSTOM_ERROR);
@@ -253,7 +253,7 @@ class VoterService
         }
     }
 
-     private function getProxyIndex(Model $model): int
+    private function getProxyIndex(Model $model): int
     {
         if (!$model->voter_id_1) {
             return 1;

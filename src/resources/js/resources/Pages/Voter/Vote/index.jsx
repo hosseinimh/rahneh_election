@@ -24,7 +24,6 @@ import utils from "../../../../utils/Utils";
 
 const voteTyeItems = [
     { id: VOTED_TYPES.PERSONAL, value: voteTypes.personal },
-    { id: VOTED_TYPES.PROXICAL, value: voteTypes.proxical },
     { id: VOTED_TYPES.NOT_SHAREHOLDER, value: voteTypes.notShareholder },
 ];
 

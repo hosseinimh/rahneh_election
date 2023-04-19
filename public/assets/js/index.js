@@ -9633,9 +9633,6 @@ var voteTyeItems = [{
   id: _constants__WEBPACK_IMPORTED_MODULE_5__.VOTED_TYPES.PERSONAL,
   value: _constants_strings__WEBPACK_IMPORTED_MODULE_4__.voteTypes.personal
 }, {
-  id: _constants__WEBPACK_IMPORTED_MODULE_5__.VOTED_TYPES.PROXICAL,
-  value: _constants_strings__WEBPACK_IMPORTED_MODULE_4__.voteTypes.proxical
-}, {
   id: _constants__WEBPACK_IMPORTED_MODULE_5__.VOTED_TYPES.NOT_SHAREHOLDER,
   value: _constants_strings__WEBPACK_IMPORTED_MODULE_4__.voteTypes.notShareholder
 }];
